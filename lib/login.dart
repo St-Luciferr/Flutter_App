@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
+import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -41,10 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (value != null && value.length < 4) {
                     return 'Username must be at least 4 characters long';
                   }
-                  if (value != null &&
-                      !value.contains(RegExp(r'^[a-zA-Z0-9]+$'))) {
-                    return 'Username can only contain letters and numbers';
-                  }
+
                   return null;
                 },
                 onSaved: (value) {
@@ -86,6 +84,16 @@ class _LoginPageState extends State<LoginPage> {
                     // Perform the login action (e.g. send the email and password
                     // to a server to verify the user's credentials)
                   }
+                },
+              ),
+              OutlinedButton(
+                child: const Text('Sign Up Now'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SignupPage(title: 'Sign Up'),
+                    ),
+                  );
                 },
               ),
               TextButton(
