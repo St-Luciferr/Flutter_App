@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bcrypt/bcrypt.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -15,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   // Create variables to store the user's email and password
   String _username = '';
   String _password = '';
+  String _hashedPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,9 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   onSaved: (value) {
                     _password = value ?? '';
+                    _hashedPassword =
+                        BCrypt.hashpw(_password, BCrypt.gensalt());
+                    _password = '';
                   }),
               ElevatedButton(
                 child: const Text('Login'),
@@ -76,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     _formKey.currentState!.save();
                     debugPrint(_password);
                     debugPrint(_username);
+                    debugPrint(_hashedPassword);
                     debugPrint(_formKey.currentState.toString());
                     // Perform the login action (e.g. send the email and password
                     // to a server to verify the user's credentials)
