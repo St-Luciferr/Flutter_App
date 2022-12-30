@@ -88,6 +88,17 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
               ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(
+                      fontSize: 10, decoration: TextDecoration.underline),
+                ),
+                child: const Text("Forgot password?"),
+                onPressed: () {
+                  // Open forgot password page
+                  debugPrint('forgot password link clicked');
+                },
+              )
             ],
           ),
         ),
