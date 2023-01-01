@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'signup.dart';
+import 'Homepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -83,6 +84,12 @@ class _LoginPageState extends State<LoginPage> {
                     debugPrint(_formKey.currentState.toString());
                     // Perform the login action (e.g. send the email and password
                     // to a server to verify the user's credentials)
+
+                    Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  );
                   }
                 },
               ),
