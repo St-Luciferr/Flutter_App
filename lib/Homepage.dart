@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 // import 'dart:js';
 
 // ignore_for_file: non_constant_identifier_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace
@@ -13,15 +13,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
  
-// class HomepageState extends State<Homepage> {
-//   // Homepage({super.key});
-//   File? _image;
-//   Future getImage() async {
-//     final image = await ImagePicker().pickImage(source: ImageSource.camera);
-//     if (image == null) return;
+  late File cameraFile;
+  Future getImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image == null) return;
 
-//     final imageTemporary = File(image.path);
-//   }
+    final imageTemporary = File(image.path);
+      setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +32,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Color.fromARGB(255, 97, 153, 199),
           ),
           body: Container(
-            decoration: BoxDecoration(
-              color: Colors.black,
-            ),
-            margin: EdgeInsets.fromLTRB(30, 40, 30, 20),
+            margin: EdgeInsets.fromLTRB(30, 10, 30, 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                     CustomButton(
                       title: 'Open Camera',
                       icon: Icons.camera_alt,
-                      onClick: () => {},
+                      onClick: getImage,
                     ),
                     SizedBox(
                       height: 20,
@@ -102,6 +98,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
+            
             elevation: 10.0,
             child: const Icon(Icons.keyboard_arrow_right),
             onPressed: () {},
@@ -164,11 +161,10 @@ Widget CustomButton({
   return Container(
     height: 150,
     width: 150,
-    decoration: BoxDecoration(
-        color: Colors.red,
-        border: Border.all(
-          width: 4,
-        ),
+    decoration: 
+    
+    BoxDecoration(
+      color: Colors.black,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
