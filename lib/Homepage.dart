@@ -1,7 +1,7 @@
-import 'dart:io';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'dart:io';
+import 'dart:async';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.camera});
@@ -75,6 +75,10 @@ class _HomePageState extends State<HomePage> {
         },
         child: const Icon(Icons.camera_alt),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(height: 50.0),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
