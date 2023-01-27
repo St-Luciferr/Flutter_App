@@ -1,184 +1,97 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-// import 'dart:js';
-
-// ignore_for_file: non_constant_identifier_names, prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace
+import 'package:camera/camera.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.camera});
+  final CameraDescription camera;
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
- 
-  late File cameraFile;
-  Future getImage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (image == null) return;
+  late CameraController _controller;
+  late Future<void> _InitializeControllerFuture;
+  @override
+  void initState() {
+    super.initState();
+    // To display the current output from the Camera,
+    // create a CameraController.
+    _controller = CameraController(
+      // Get a specific camera from the list of available cameras.
+      widget.camera,
+      // Define the resolution to use.
+      ResolutionPreset.medium,
+    );
+    _InitializeControllerFuture = _controller.initialize();
+  }
 
-    final imageTemporary = File(image.path);
-      setState(() {});
+  @override
+  void dispose() {
+    // Dispose of the controller when the widget is disposed.
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Welcome to Flutter',
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Welcome to Flutter'),
-            backgroundColor: Color.fromARGB(255, 97, 153, 199),
-          ),
-          body: Container(
-            margin: EdgeInsets.fromLTRB(30, 10, 30, 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // SizedBox(
-                    //   height: 50,
-                    // ),
-                    CustomButton(
-                      title: 'Option 1',
-                      icon: Icons.camera_alt,
-                      onClick: () => {},
-                    ),
-                    // SizedBox(
-                    //   height: 40,
-                    // ),
-                    CustomButton(
-                      title: 'Option 2',
-                      icon: Icons.image_outlined,
-                      onClick: () => {},
-                    ),
-                  ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: FutureBuilder<void>(
+        future: _InitializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            // If the Future is complete, display the preview.
+            return CameraPreview(_controller);
+          } else {
+            // Otherwise, display a loading indicator.
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // Take the Picture in a try / catch block. If anything goes wrong,
+          // catch the error.
+          try {
+            // Ensure that the camera is initialized.
+            await _InitializeControllerFuture;
+            // Attempt to take a picture and get the file `image`
+            // where it was saved.
+            final image = await _controller.takePicture();
+            if (!mounted) return;
+            // If the picture was taken, display it on a new screen.
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => DisplayPictureScreen(
+                  imagePath: image.path,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomButton(
-                      title: 'Open Camera',
-                      icon: Icons.camera_alt,
-                      onClick: getImage,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomButton(
-                      title: 'Upload Image',
-                      icon: Icons.image_outlined,
-                      onClick: () => {},
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      title: 'Option 1',
-                      icon: Icons.camera_alt,
-                      onClick: () => {},
-                    ),
-                    CustomButton(
-                      title: 'Option 2',
-                      icon: Icons.image_outlined,
-                      onClick: () => {},
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            
-            elevation: 10.0,
-            child: const Icon(Icons.keyboard_arrow_right),
-            onPressed: () {},
-          ),
-          drawer: Drawer(
-            child: ListView(
-              children: <Widget>[
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: Text(
-                    '''Profile\nemail address\nname''',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  title: Text('Item 1'),
-                ),
-                ListTile(
-                  title: Text('Item 2'),
-                ),
-              ],
-            ),
-          ),
-        ));
+              ),
+            );
+          } catch (e) {
+            print(e);
+          }
+        },
+        child: const Icon(Icons.camera_alt),
+      ),
+    );
   }
 }
 
-// class Page2 extends StatelessWidget {
-//   const Page2({super.key});
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//           appBar: AppBar(
-//             title: const Text('Second Page'),
-//             backgroundColor: const Color.fromARGB(255, 97, 153, 199),
-//             leading: BackButton(
-//               onPressed: () {},
-//             ),
-//           ),
-//           body: const Center(
-//             child: Text('PAGE 2'),
-//           ),
-//         );
-//   }
-// }
+// A widget that displays the picture taken by the user.
+class DisplayPictureScreen extends StatelessWidget {
+  final String imagePath;
 
-Widget CustomButton({
-  required String title,
-  required IconData icon,
-  required VoidCallback onClick,
-}) {
-  return Container(
-    height: 150,
-    width: 150,
-    decoration: 
-    
-    BoxDecoration(
-      color: Colors.black,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromARGB(255, 185, 184, 184),
-            blurRadius: 2,
-            spreadRadius: 1,
-          )
-        ]),
-    child: ElevatedButton(
-      onPressed: onClick,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [Icon(icon), SizedBox(height: 10), Text(title)],
-      ),
-    ),
-  );
+  const DisplayPictureScreen({super.key, required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Display the Picture')),
+      // The image is stored as a file on the device. Use the `Image.file`
+      // constructor with the given path to display the image.
+      body: Image.file(File(imagePath)),
+    );
+  }
 }

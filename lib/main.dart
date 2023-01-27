@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
-import 'Homepage.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Obtain a list of the available cameras on the device.
+
   runApp(const MyApp());
 }
 

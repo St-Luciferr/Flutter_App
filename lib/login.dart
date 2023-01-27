@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
+import 'package:camera/camera.dart';
 import 'signup.dart';
 import 'Homepage.dart';
 
@@ -34,8 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                    labelText: 'Username',
-                    hintText: 'What do you want to be called here?'),
+                    labelText: 'Username', hintText: 'What is your username'),
                 validator: (value) {
                   if (value?.isEmpty == true) {
                     return 'Please enter a username';
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   }),
               ElevatedButton(
                 child: const Text('Login'),
-                onPressed: () {
+                onPressed: () async {
                   // Validate the form
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
@@ -84,12 +84,13 @@ class _LoginPageState extends State<LoginPage> {
                     debugPrint(_formKey.currentState.toString());
                     // Perform the login action (e.g. send the email and password
                     // to a server to verify the user's credentials)
-
+                    final cameras = await availableCameras();
+                    final camera = cameras.first;
                     Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(camera: camera),
+                      ),
+                    );
                   }
                 },
               ),
