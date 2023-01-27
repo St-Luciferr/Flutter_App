@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
@@ -92,10 +95,26 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Image.file(File(imagePath)),
-    );
+        appBar: AppBar(title: const Text('Image Viewer')),
+        // The image is stored as a file on the device. Use the `Image.file`
+        // constructor with the given path to display the image.
+        body: Container(
+          padding: const EdgeInsets.all(0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.file(File(imagePath)),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: BottomAppBar(
+                      child: Container(
+                    height: 50.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: Transform.rotate(
+                        angle: pi, child: Icon(Icons.expand_circle_down)),
+                  ))),
+            ],
+          ),
+        ));
   }
 }
