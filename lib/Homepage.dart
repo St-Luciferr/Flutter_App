@@ -1,10 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'listDetails.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.camera});
@@ -89,8 +88,8 @@ class _HomePageState extends State<HomePage> {
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
-
-  const DisplayPictureScreen({super.key, required this.imagePath});
+  late List<String> monuments;
+  DisplayPictureScreen({super.key, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +106,40 @@ class DisplayPictureScreen extends StatelessWidget {
               Align(
                   alignment: Alignment.bottomCenter,
                   child: BottomAppBar(
-                      child: Container(
-                    height: 50.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: Transform.rotate(
-                        angle: pi, child: Icon(Icons.expand_circle_down)),
-                  ))),
+                      child: OutlinedButton(
+                          onPressed: () => {
+                                monuments = <String>['one', 'two'],
+                                Navigator.of(context)
+                                    .push(_createRoute(monuments))
+                              },
+                          child: Container(
+                            height: 60.0,
+                            width: MediaQuery.of(context).size.width,
+                            child: Transform.rotate(
+                                angle: pi,
+                                child: Icon(Icons.expand_circle_down)),
+                          )))),
             ],
           ),
         ));
   }
+}
+
+Route _createRoute(monuments) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        ListViews(monuments: monuments),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.easeIn;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
