@@ -23,7 +23,9 @@ class _ListViewsState extends State<ListViews> {
             Align(
                 alignment: Alignment.topLeft,
                 child: Image(
-                    image: AssetImage('img/img.jpg'), height: 150, width: 150)),
+                    image: AssetImage('assets/img.jpg'),
+                    height: 150,
+                    width: 150)),
             Text('name: Khatra Monument', textAlign: TextAlign.left),
             Text('Date of Construction: 2056/01/24', textAlign: TextAlign.left),
             Text('Constructed By: Santosh Pandey', textAlign: TextAlign.left),
@@ -41,7 +43,9 @@ class _ListViewsState extends State<ListViews> {
             Align(
                 alignment: Alignment.topLeft,
                 child: Image(
-                    image: AssetImage('img/img.jpg'), height: 150, width: 150)),
+                    image: AssetImage('assets/img.jpg'),
+                    height: 150,
+                    width: 150)),
             Text('name: Khatra Monument', textAlign: TextAlign.left),
             Text('Date of Construction: 2056/01/24', textAlign: TextAlign.left),
             Text('Constructed By: Santosh Pandey', textAlign: TextAlign.left),
@@ -59,7 +63,9 @@ class _ListViewsState extends State<ListViews> {
             Align(
                 alignment: Alignment.topLeft,
                 child: Image(
-                    image: AssetImage('img/img.jpg'), height: 150, width: 150)),
+                    image: AssetImage('assets/img.jpg'),
+                    height: 150,
+                    width: 150)),
             Text('name: Khatra Monument', textAlign: TextAlign.left),
             Text('Date of Construction: 2056/01/24', textAlign: TextAlign.left),
             Text('Constructed By: Santosh Pandey', textAlign: TextAlign.left),

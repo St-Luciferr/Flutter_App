@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
+import 'package:mysql1/mysql1.dart';
 import 'signup.dart';
 import 'Homepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
   final String title;
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -27,8 +29,15 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Login'),
       ),
+      resizeToAvoidBottomInset: false,
       body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/background.jpg'), fit: BoxFit.fill)),
         padding: const EdgeInsets.all(20.0),
+        alignment: Alignment.topCenter,
         child: Form(
           key: _formKey,
           child: Column(
@@ -95,7 +104,11 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               OutlinedButton(
-                child: const Text('Sign Up Now'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text(
+                  'Sign Up Now',
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
