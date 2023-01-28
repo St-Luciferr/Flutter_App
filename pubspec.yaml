@@ -42,7 +42,7 @@ dependencies:
   camera: ^0.10.2+1
   path: ^1.8.2
   mysql1: ^0.20.0
-
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter
