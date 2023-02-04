@@ -26,9 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
       resizeToAvoidBottomInset: false,
       body: Container(
         width: MediaQuery.of(context).size.width,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:tflite/tflite.dart';
 import 'listDetails.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // To display the current output from the Camera,
     // create a CameraController.
+    _inittfModel();
     _controller = CameraController(
       // Get a specific camera from the list of available cameras.
       widget.camera,
@@ -62,6 +64,17 @@ class _HomePageState extends State<HomePage> {
             // Attempt to take a picture and get the file `image`
             // where it was saved.
             final image = await _controller.takePicture();
+            // run model on taken picture and send result on debug print
+            var recognitions = await Tflite.detectObjectOnImage(
+                path: image.path, // required
+                model: "SSDMobileNet",
+                imageMean: 127.5,
+                imageStd: 127.5,
+                threshold: 0.4, // defaults to 0.1
+                numResultsPerClass: 2, // defaults to 5
+                asynch: true // defaults to true
+                );
+            _debugPrint(recognitions);
             if (!mounted) return;
             // If the picture was taken, display it on a new screen.
             await Navigator.of(context).push(
@@ -85,6 +98,26 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+//function to laod tflite model
+Future<void> _inittfModel() async {
+  String? res = await Tflite.loadModel(
+      model: "assets/ssd_mobilenet.tflite",
+      labels: "assets/ssd_mobilenet.txt",
+      numThreads: 1, // defaults to 1
+      // defaults to true, set to false to load resources outside assets
+      isAsset: true,
+      // defaults to false, set to true to use GPU delegate
+      useGpuDelegate: false);
+}
+
+Future<void> _closetfModel() async {
+  await Tflite.close();
+}
+
+void _debugPrint(var rec) {
+  debugPrint(rec.toString());
+}
+
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
@@ -94,7 +127,7 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Image Viewer')),
+        appBar: AppBar(title: const Text('Inference Results')),
         // The image is stored as a file on the device. Use the `Image.file`
         // constructor with the given path to display the image.
         body: Container(
@@ -108,6 +141,7 @@ class DisplayPictureScreen extends StatelessWidget {
                   child: BottomAppBar(
                       child: OutlinedButton(
                           onPressed: () => {
+                                _closetfModel(),
                                 monuments = <String>['one', 'two'],
                                 Navigator.of(context)
                                     .push(_createRoute(monuments))
