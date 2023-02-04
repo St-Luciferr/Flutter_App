@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'listDetails.dart';
+import 'resizeImage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.camera});
@@ -64,13 +65,14 @@ class _HomePageState extends State<HomePage> {
             // Attempt to take a picture and get the file `image`
             // where it was saved.
             final image = await _controller.takePicture();
+            final resized_img = await resizeImage(image);
             // run model on taken picture and send result on debug print
             var recognitions = await Tflite.detectObjectOnImage(
-                path: image.path, // required
+                path: resized_img.path, // required
                 model: "SSDMobileNet",
                 imageMean: 127.5,
                 imageStd: 127.5,
-                threshold: 0.4, // defaults to 0.1
+                threshold: 0.5, // defaults to 0.1
                 numResultsPerClass: 2, // defaults to 5
                 asynch: true // defaults to true
                 );
@@ -80,7 +82,7 @@ class _HomePageState extends State<HomePage> {
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => DisplayPictureScreen(
-                  imagePath: image.path,
+                  imagePath: resized_img.path,
                 ),
               ),
             );
@@ -115,7 +117,12 @@ Future<void> _closetfModel() async {
 }
 
 void _debugPrint(var rec) {
-  debugPrint(rec.toString());
+  String output = "";
+  for (var item in rec) {
+    output +=
+        "${item['detectedClass']}: ${item['confidenceInClass']} '\nx: '${item['rect']['x']} '\ty: '${item['rect']['y']} '\tw: '${item['rect']['w']} '\th: '${item['rect']['h']}\n";
+  }
+  debugPrint(output);
 }
 
 // A widget that displays the picture taken by the user.

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
-import 'package:mysql1/mysql1.dart';
 import 'signup.dart';
 import 'Homepage.dart';
 
