@@ -45,68 +45,6 @@ class _ListViewsState extends State<ListViews> {
               ],
             ),
         ],
-
-        // [
-        //   Column(
-        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Align(
-        //           alignment: Alignment.topLeft,
-        //           child: Image(
-        //               image: AssetImage('assets/img.jpg'),
-        //               height: 150,
-        //               width: 150)),
-        //       Text('name: Khatra Monument', textAlign: TextAlign.left),
-        //       Text('Date of Construction: 2056/01/24', textAlign: TextAlign.left),
-        //       Text('Constructed By: Santosh Pandey', textAlign: TextAlign.left),
-        //       Text(
-        //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit,'
-        //           'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        //           'Cursus vitae congue mauris rhoncus. Lectus proin nibh nisl condimentum',
-        //           textAlign: TextAlign.justify),
-        //     ],
-        //   ),
-        //   Column(
-        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Align(
-        //           alignment: Alignment.topLeft,
-        //           child: Image(
-        //               image: AssetImage('assets/img.jpg'),
-        //               height: 150,
-        //               width: 150)),
-        //       Text('name: Khatra Monument', textAlign: TextAlign.left),
-        //       Text('Date of Construction: 2056/01/24', textAlign: TextAlign.left),
-        //       Text('Constructed By: Santosh Pandey', textAlign: TextAlign.left),
-        //       Text(
-        //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit,'
-        //           'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        //           'Cursus vitae congue mauris rhoncus. Lectus proin nibh nisl condimentum',
-        //           textAlign: TextAlign.justify),
-        //     ],
-        //   ),
-        //   Column(
-        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Align(
-        //           alignment: Alignment.topLeft,
-        //           child: Image(
-        //               image: AssetImage('assets/img.jpg'),
-        //               height: 150,
-        //               width: 150)),
-        //       Text('name: Khatra Monument', textAlign: TextAlign.left),
-        //       Text('Date of Construction: 2056/01/24', textAlign: TextAlign.left),
-        //       Text('Constructed By: Santosh Pandey', textAlign: TextAlign.left),
-        //       Text(
-        //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit,'
-        //           'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        //           'Cursus vitae congue mauris rhoncus. Lectus proin nibh nisl condimentum',
-        //           textAlign: TextAlign.justify),
-        //     ],
-        //   ),
       ),
     );
   }
