@@ -68,21 +68,23 @@ class _HomePageState extends State<HomePage> {
             final resized_img = await resizeImage(image);
             // run model on taken picture and send result on debug print
             var recognitions = await Tflite.detectObjectOnImage(
-                path: resized_img.path, // required
+                path: image.path, // required
                 model: "SSDMobileNet",
-                imageMean: 127.5,
-                imageStd: 127.5,
-                threshold: 0.5, // defaults to 0.1
-                numResultsPerClass: 2, // defaults to 5
+                imageMean: 0,
+                imageStd: 255,
+                threshold: 0.9, // defaults to 0.1
+                numResultsPerClass: 1, // defaults to 5
                 asynch: true // defaults to true
                 );
             _debugPrint(recognitions);
+            // await Tflite.close();
             if (!mounted) return;
             // If the picture was taken, display it on a new screen.
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => DisplayPictureScreen(
-                  imagePath: resized_img.path,
+                  imagePath: image.path,
+                  monuments: recognitions!,
                 ),
               ),
             );
@@ -103,8 +105,8 @@ class _HomePageState extends State<HomePage> {
 //function to laod tflite model
 Future<void> _inittfModel() async {
   String? res = await Tflite.loadModel(
-      model: "assets/ssd_mobilenet.tflite",
-      labels: "assets/ssd_mobilenet.txt",
+      model: "assets/monumentModel.tflite",
+      labels: "assets/labels.txt",
       numThreads: 1, // defaults to 1
       // defaults to true, set to false to load resources outside assets
       isAsset: true,
@@ -128,41 +130,44 @@ void _debugPrint(var rec) {
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
-  late List<String> monuments;
-  DisplayPictureScreen({super.key, required this.imagePath});
+  final List<dynamic> monuments;
+  DisplayPictureScreen(
+      {super.key, required this.imagePath, required this.monuments});
 
+  // for (var item in rec) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Inference Results')),
-        // The image is stored as a file on the device. Use the `Image.file`
-        // constructor with the given path to display the image.
-        body: Container(
-          padding: const EdgeInsets.all(0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.file(File(imagePath)),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: BottomAppBar(
-                      child: OutlinedButton(
-                          onPressed: () => {
-                                _closetfModel(),
-                                monuments = <String>['one', 'two'],
-                                Navigator.of(context)
-                                    .push(_createRoute(monuments))
-                              },
-                          child: Container(
-                            height: 60.0,
-                            width: MediaQuery.of(context).size.width,
-                            child: Transform.rotate(
-                                angle: pi,
-                                child: Icon(Icons.expand_circle_down)),
-                          )))),
-            ],
-          ),
-        ));
+      appBar: AppBar(title: const Text('Inference Results')),
+      // The image is stored as a file on the device. Use the `Image.file`
+      // constructor with the given path to display the image.
+      body: Container(
+        padding: const EdgeInsets.all(0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.file(File(imagePath)),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: BottomAppBar(
+                child: OutlinedButton(
+                  onPressed: () =>
+                      {Navigator.of(context).push(_createRoute(monuments))},
+                  child: Container(
+                    height: 60.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: Transform.rotate(
+                      angle: pi,
+                      child: Icon(Icons.expand_circle_down),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

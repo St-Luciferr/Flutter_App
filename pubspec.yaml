@@ -44,7 +44,7 @@ dependencies:
   mysql1: ^0.20.0
   tflite:
     git:
-      url: https://github.com/St-Luciferr/flutter_tflite.git
+      url: https://github.com/Despicable-Us/tflite_flutter.git
   flutter_native_image: ^0.0.6+1
       
 dev_dependencies:

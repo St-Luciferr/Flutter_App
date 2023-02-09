@@ -404,8 +404,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6026c7722d29c0a9cef16610eb2ad104f659ef57"
-      url: "https://github.com/St-Luciferr/flutter_tflite.git"
+      resolved-ref: d46eb630fbed45c21d777e01d676eb2c6f29f9f9
+      url: "https://github.com/Despicable-Us/tflite_flutter.git"
     source: git
     version: "1.1.2"
   typed_data:
