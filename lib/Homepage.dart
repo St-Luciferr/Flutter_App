@@ -4,8 +4,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
+
 import 'listDetails.dart';
 import 'resizeImage.dart';
+import 'package:amid/components/inferencedView.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.camera});
@@ -82,7 +84,7 @@ class _HomePageState extends State<HomePage> {
             // If the picture was taken, display it on a new screen.
             await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
+                builder: (context) => InferencePictureScreen(
                   imagePath: image.path,
                   monuments: recognitions!,
                 ),
