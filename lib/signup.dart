@@ -18,10 +18,10 @@ class _SignupPageState extends State<SignupPage> {
   String? _password1;
   String? _password2;
   String? _hashedPassword;
-  String? _Email;
-  String? _FirstName;
-  String? _LastName;
-  String? _Address;
+  String? _email;
+  String? _firstName;
+  String? _lastName;
+  String? _address;
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +30,23 @@ class _SignupPageState extends State<SignupPage> {
         title: const Text('SignUp'),
       ),
       body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: Column(children: <Widget>[
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                    labelText: 'Username',
-                    hintText: 'What do you want to be called here?'),
+                  labelText: 'Username',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                  hintText: 'What do you want to be called here?',
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
                     return 'Please enter a username';
@@ -54,8 +63,16 @@ class _SignupPageState extends State<SignupPage> {
               ),
               TextFormField(
                   decoration: const InputDecoration(
-                      labelText: 'New Password',
-                      hintText: 'Enter new password'),
+                    labelText: 'New Password',
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(255, 6, 95, 95),
+                    ),
+                    hintText: 'Enter new password',
+                    hintStyle: TextStyle(
+                      fontSize: 15,
+                      color: Color.fromARGB(255, 11, 148, 148),
+                    ),
+                  ),
                   obscureText: true,
                   controller: passwordController,
                   validator: (value) {
@@ -78,8 +95,16 @@ class _SignupPageState extends State<SignupPage> {
                   }),
               TextFormField(
                   decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
-                      hintText: 'Confirm new password'),
+                    labelText: 'Confirm Password',
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(255, 6, 95, 95),
+                    ),
+                    hintText: 'Confirm new password',
+                    hintStyle: TextStyle(
+                      fontSize: 15,
+                      color: Color.fromARGB(255, 11, 148, 148),
+                    ),
+                  ),
                   obscureText: true,
                   controller: confirmPasswordController,
                   validator: (value) {
@@ -99,7 +124,16 @@ class _SignupPageState extends State<SignupPage> {
                   }),
               TextFormField(
                 decoration: const InputDecoration(
-                    labelText: 'Email', hintText: 'Your Email?'),
+                  labelText: 'Email',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                  hintText: 'Enter Your Email ID',
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
                     return 'Email is required';
@@ -112,12 +146,21 @@ class _SignupPageState extends State<SignupPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _Email = value!;
+                  _email = value!;
                 },
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                    labelText: 'First Name:', hintText: 'Enter first name'),
+                  labelText: 'First Name:',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                  hintText: 'Enter first name',
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
                     return 'first name is required';
@@ -125,12 +168,21 @@ class _SignupPageState extends State<SignupPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _FirstName = value!;
+                  _firstName = value!;
                 },
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                    labelText: 'Last Name:', hintText: 'Enter Last name'),
+                  labelText: 'Last Name:',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                  hintText: 'Enter Last name',
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
                     return 'Last name is required';
@@ -138,13 +190,21 @@ class _SignupPageState extends State<SignupPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _LastName = value!;
+                  _lastName = value!;
                 },
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                    labelText: 'Address:',
-                    hintText: 'Enter your permanent address'),
+                  labelText: 'Address:',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                  hintText: 'Enter your permanent address',
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
                     return 'Address is required';
@@ -152,36 +212,55 @@ class _SignupPageState extends State<SignupPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _Address = value!;
+                  _address = value!;
                 },
               ),
               ElevatedButton(
-                  child: const Text('Sign Up'),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // If the form is valid, save the email and password
-                      // to the variables and submit the form
-                      debugPrint(_username);
-                      debugPrint(_password1);
-                      debugPrint(_hashedPassword);
-                      debugPrint(_Email);
-                      debugPrint(_Address);
-                      debugPrint(_formKey.currentState.toString());
-                    }
-                  }),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 2, 71, 88),
+                  foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  fixedSize: const Size(200, 35),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                child: const Text('Sign Up'),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    // If the form is valid, save the email and password
+                    // to the variables and submit the form
+                    debugPrint(_username);
+                    debugPrint(_password1);
+                    debugPrint(_hashedPassword);
+                    debugPrint(_email);
+                    debugPrint(_address);
+                    debugPrint(_formKey.currentState.toString());
+                  }
+                },
+              ),
               OutlinedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 2, 71, 88),
+                  foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  fixedSize: const Size(200, 35),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
                 child: const Text('Login'),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => LoginPage(title: 'Login'),
+                      builder: (context) => const LoginPage(title: 'Login'),
                     ),
                   );
                 },
               )
-            ]),
-          )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

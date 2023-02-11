@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'dart:ui';
+// import 'dart:ui';
 import 'dart:math';
-import 'package:amid/listDetails.dart';
+import 'package:amid/list_details.dart';
 
 // A widget that displays the picture taken by the user.
 class InferencePictureScreen extends StatelessWidget {
   final String imagePath;
   final List<dynamic> monuments;
-  InferencePictureScreen(
+  const InferencePictureScreen(
       {super.key, required this.imagePath, required this.monuments});
 
   // for (var item in rec) {}
@@ -56,12 +56,12 @@ class InferencePictureScreen extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: () =>
                       {Navigator.of(context).push(_createRoute(monuments))},
-                  child: Container(
+                  child: SizedBox(
                     height: 60.0,
                     width: MediaQuery.of(context).size.width,
                     child: Transform.rotate(
                       angle: pi,
-                      child: Icon(Icons.expand_circle_down),
+                      child: const Icon(Icons.expand_circle_down),
                     ),
                   ),
                 ),

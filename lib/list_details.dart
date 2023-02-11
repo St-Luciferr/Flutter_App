@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ListViews extends StatefulWidget {
-  ListViews({super.key, required this.monuments});
+  const ListViews({super.key, required this.monuments});
   final List<dynamic> monuments;
   @override
   State<ListViews> createState() => _ListViewsState();
@@ -16,14 +15,14 @@ class _ListViewsState extends State<ListViews> {
         title: const Text('Detected Monuments'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         children: <Widget>[
           for (var monument in widget.monuments)
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
+                const Align(
                   alignment: Alignment.topLeft,
                   child: Image(
                       image: AssetImage('assets/img.jpg'),
@@ -33,11 +32,11 @@ class _ListViewsState extends State<ListViews> {
                 Text(
                     "Detected Monument: ${monument['detectedClass']} \nConfidence Score: ${monument['confidenceInClass']}",
                     textAlign: TextAlign.left),
-                Text('Date of Construction: 2056/01/24',
+                const Text('Date of Construction: 2056/01/24',
                     textAlign: TextAlign.left),
-                Text('Constructed By: Santosh Pandey',
+                const Text('Constructed By: Santosh Pandey',
                     textAlign: TextAlign.left),
-                Text(
+                const Text(
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,'
                     'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
                     'Cursus vitae congue mauris rhoncus. Lectus proin nibh nisl condimentum',

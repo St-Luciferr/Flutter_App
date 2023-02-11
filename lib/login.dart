@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
 import 'signup.dart';
-import 'Homepage.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -29,24 +29,47 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/background.jpg'), fit: BoxFit.fill)),
-        padding: const EdgeInsets.all(20.0),
+        decoration: const BoxDecoration(
+          color: Colors.grey,
+          image: DecorationImage(
+              image: AssetImage('assets/background.jpg'), fit: BoxFit.fill),
+        ),
+        padding: const EdgeInsets.fromLTRB(50, 200, 50, 20),
         alignment: Alignment.topCenter,
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
+              const Text(
+                "WelCome To Amid",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  color: Color.fromARGB(255, 5, 73, 73),
+                ),
+              ),
               TextFormField(
                 decoration: const InputDecoration(
-                    labelText: 'Username', hintText: 'What is your username'),
+                  // filled: true,
+                  // fillColor: Colors.grey,
+                  contentPadding: EdgeInsets.fromLTRB(0, 50, 0, 5),
+                  labelText: 'Username',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                  hintText: 'Enter your username',
+                  hintStyle: TextStyle(
+                    fontSize: 13,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
                     return 'Please enter a username';
                   }
-                  if (value != null && value.length < 4) {
-                    return 'Username must be at least 4 characters long';
+                  if (value != null && value.length < 6) {
+                    return 'Username must be at least 6 characters long';
                   }
 
                   return null;
@@ -57,24 +80,43 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               TextFormField(
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value?.isEmpty == true) {
-                      return 'Please enter a password';
-                    }
-                    if (value != null && value.length < 8) {
-                      return 'Password length should be at least 8 characters';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _password = value ?? '';
-                    _hashedPassword =
-                        BCrypt.hashpw(_password, BCrypt.gensalt());
-                    _password = '';
-                  }),
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+                  labelText: 'Password',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                  hintText: '*******',
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
+                obscureText: true,
+                validator: (value) {
+                  if (value?.isEmpty == true) {
+                    return 'Please enter a password';
+                  }
+                  if (value != null && value.length < 8) {
+                    return 'Password length should be at least 8 characters';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _password = value ?? '';
+                  _hashedPassword = BCrypt.hashpw(_password, BCrypt.gensalt());
+                  _password = '';
+                },
+              ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 2, 71, 88),
+                  foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  fixedSize: const Size(200, 35),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
                 child: const Text('Login'),
                 onPressed: () async {
                   // Validate the form
@@ -91,16 +133,25 @@ class _LoginPageState extends State<LoginPage> {
                     // to a server to verify the user's credentials)
                     final cameras = await availableCameras();
                     final camera = cameras.first;
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(camera: camera),
-                      ),
-                    );
+                    if (mounted) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(camera: camera),
+                        ),
+                      );
+                    }
                   }
                 },
               ),
               OutlinedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 2, 71, 88),
+                  foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  fixedSize: const Size(200, 35),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
                 child: const Text(
                   'Sign Up Now',
                   style: TextStyle(color: Colors.white),
@@ -108,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => SignupPage(title: 'Sign Up'),
+                      builder: (context) => const SignupPage(title: 'Sign Up'),
                     ),
                   );
                 },
@@ -116,12 +167,16 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                 style: TextButton.styleFrom(
                   textStyle: const TextStyle(
-                      fontSize: 10, decoration: TextDecoration.underline),
+                      fontSize: 15, decoration: TextDecoration.underline),
                 ),
-                child: const Text("Forgot password?"),
+                child: const Text(
+                  "Forgot password?",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
+                  ),
+                ),
                 onPressed: () {
                   // Open forgot password page
-                  debugPrint('forgot password link clicked');
                 },
               )
             ],
