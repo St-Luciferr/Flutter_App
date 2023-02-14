@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -78,6 +78,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation'org.tensorflow:tensorflow-android:+'
     implementation 'org.tensorflow:tensorflow-lite:0.1.100'
+    implementation platform('com.google.firebase:firebase-bom:31.2.1')
     // implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:0.1.100'
 
 }
