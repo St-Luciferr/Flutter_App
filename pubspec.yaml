@@ -46,6 +46,7 @@ dependencies:
     git:
       url: https://github.com/Despicable-Us/tflite_flutter.git
   flutter_native_image: ^0.0.6+1
+  firebase_core: ^2.5.0
       
 dev_dependencies:
   flutter_test:
