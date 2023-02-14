@@ -1,8 +1,12 @@
+import 'package:amid/provider/google_sign_in.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
 import 'signup.dart';
 import 'home_page.dart';
+import 'package:flutter/cupertino.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -26,7 +30,25 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
+      body:
+      // Authentication of Google Account ::
+
+      //  StreamBuilder(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //         return const Center(child: CircularProgressIndicator());
+      //     } else if (snapshot.hasData) {
+      //         return const Drawer();
+      //     } else if (snapshot.hasError){
+      //         return const Center(child: Text('something went wrong'));
+      //     } else {
+      //     return const LoginPage(title: '',);
+      //    }
+      //   },
+      // );
+      
+      Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
@@ -153,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 child: const Text(
-                  'Sign Up Now',
+                  'Sign Up',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
@@ -162,6 +184,29 @@ class _LoginPageState extends State<LoginPage> {
                       builder: (context) => const SignupPage(title: 'Sign Up'),
                     ),
                   );
+                },
+              ),
+              OutlinedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 2, 71, 88),
+                  foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  fixedSize: const Size(200, 35),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                icon: const Icon(
+                  CupertinoIcons.at_circle,
+                  // color: Color.fromARGB(255, 202, 60, 60),
+                ),
+                label: const Text(
+                  'Sign Up with Google',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.googleLogin();
                 },
               ),
               TextButton(
