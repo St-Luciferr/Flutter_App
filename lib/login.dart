@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelStyle: TextStyle(
                     color: Color.fromARGB(255, 6, 95, 95),
                   ),
-                  hintText: 'Enter your username',
+                  hintText: 'Enter Your Username',
                   hintStyle: TextStyle(
                     fontSize: 13,
                     color: Color.fromARGB(255, 11, 148, 148),
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
-                    return 'Please enter a username';
+                    return 'Please Enter Username*';
                   }
                   if (value != null && value.length < 6) {
                     return 'Username must be at least 6 characters long';
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelStyle: TextStyle(
                     color: Color.fromARGB(255, 6, 95, 95),
                   ),
-                  hintText: '*******',
+                  hintText: '********',
                   hintStyle: TextStyle(
                     fontSize: 15,
                     color: Color.fromARGB(255, 11, 148, 148),
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
                 validator: (value) {
                   if (value?.isEmpty == true) {
-                    return 'Please enter a password';
+                    return 'Please Enter Password';
                   }
                   if (value != null && value.length < 8) {
                     return 'Password length should be at least 8 characters';

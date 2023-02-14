@@ -19,9 +19,6 @@ class _SignupPageState extends State<SignupPage> {
   String? _password2;
   String? _hashedPassword;
   String? _email;
-  String? _firstName;
-  String? _lastName;
-  String? _address;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +46,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
-                    return 'Please enter a username';
+                    return 'Please Enter Username*';
                   }
                   if (value != null && value.length < 4) {
                     return 'Username must be at least 4 characters long';
@@ -67,7 +64,7 @@ class _SignupPageState extends State<SignupPage> {
                     labelStyle: TextStyle(
                       color: Color.fromARGB(255, 6, 95, 95),
                     ),
-                    hintText: 'Enter new password',
+                    hintText: 'Enter New Password',
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Color.fromARGB(255, 11, 148, 148),
@@ -77,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
                   controller: passwordController,
                   validator: (value) {
                     if (value?.isEmpty == true) {
-                      return 'Please enter a password';
+                      return 'Please Enter Password*';
                     }
                     if (value != null && value.length < 8) {
                       return 'Password length should be at least 8 characters';
@@ -99,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
                     labelStyle: TextStyle(
                       color: Color.fromARGB(255, 6, 95, 95),
                     ),
-                    hintText: 'Confirm new password',
+                    hintText: 'Confirm New Password',
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Color.fromARGB(255, 11, 148, 148),
@@ -109,7 +106,7 @@ class _SignupPageState extends State<SignupPage> {
                   controller: confirmPasswordController,
                   validator: (value) {
                     if (value?.isEmpty == true) {
-                      return 'Please enter confirm password';
+                      return 'Please Confirm password*';
                     }
                     if (value != passwordController.text) {
                       return 'Password do not match';
@@ -136,7 +133,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
-                    return 'Email is required';
+                    return 'Email is required*';
                   }
                   final RegExp regex = RegExp(
                       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
@@ -147,72 +144,6 @@ class _SignupPageState extends State<SignupPage> {
                 },
                 onSaved: (value) {
                   _email = value!;
-                },
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'First Name:',
-                  labelStyle: TextStyle(
-                    color: Color.fromARGB(255, 6, 95, 95),
-                  ),
-                  hintText: 'Enter first name',
-                  hintStyle: TextStyle(
-                    fontSize: 15,
-                    color: Color.fromARGB(255, 11, 148, 148),
-                  ),
-                ),
-                validator: (value) {
-                  if (value?.isEmpty == true) {
-                    return 'first name is required';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _firstName = value!;
-                },
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Last Name:',
-                  labelStyle: TextStyle(
-                    color: Color.fromARGB(255, 6, 95, 95),
-                  ),
-                  hintText: 'Enter Last name',
-                  hintStyle: TextStyle(
-                    fontSize: 15,
-                    color: Color.fromARGB(255, 11, 148, 148),
-                  ),
-                ),
-                validator: (value) {
-                  if (value?.isEmpty == true) {
-                    return 'Last name is required';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _lastName = value!;
-                },
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Address:',
-                  labelStyle: TextStyle(
-                    color: Color.fromARGB(255, 6, 95, 95),
-                  ),
-                  hintText: 'Enter your permanent address',
-                  hintStyle: TextStyle(
-                    fontSize: 15,
-                    color: Color.fromARGB(255, 11, 148, 148),
-                  ),
-                ),
-                validator: (value) {
-                  if (value?.isEmpty == true) {
-                    return 'Address is required';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _address = value!;
                 },
               ),
               ElevatedButton(
@@ -234,7 +165,6 @@ class _SignupPageState extends State<SignupPage> {
                     debugPrint(_password1);
                     debugPrint(_hashedPassword);
                     debugPrint(_email);
-                    debugPrint(_address);
                     debugPrint(_formKey.currentState.toString());
                   }
                 },
