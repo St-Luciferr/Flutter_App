@@ -37,8 +37,8 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     // Dispose of the controller when the widget is disposed.
     _controller.dispose();
-    super.dispose();
     _closetfModel();
+    super.dispose();
   }
 
   @override
@@ -67,19 +67,9 @@ class _HomePageState extends State<HomePage> {
             // Attempt to take a picture and get the file `image`
             // where it was saved.
             final image = await _controller.takePicture();
-            // final resized_img = await resizeImage(image);
             // run model on taken picture and send result on debug print
-            var recognitions = await Tflite.detectObjectOnImage(
-                path: image.path, // required
-                model: "SSDMobileNet",
-                imageMean: 0,
-                imageStd: 255,
-                threshold: 0.9, // defaults to 0.1
-                numResultsPerClass: 1, // defaults to 5
-                asynch: true // defaults to true
-                );
+            var recognitions = await _detectMonument(image.path);
             _debugPrint(recognitions);
-            // await Tflite.close();
             if (!mounted) return;
             // If the picture was taken, display it on a new screen.
             await Navigator.of(context).push(
@@ -102,6 +92,18 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+}
+
+Future<List<dynamic>?> _detectMonument(String imgPath) async {
+  var recognitions = await Tflite.detectObjectOnImage(
+      path: imgPath,
+      model: "SSDMobileNet",
+      imageMean: 0,
+      imageStd: 255,
+      threshold: 0.7,
+      numResultsPerClass: 1,
+      asynch: true);
+  return recognitions;
 }
 
 //function to laod tflite model

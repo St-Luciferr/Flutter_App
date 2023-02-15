@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -19,8 +23,23 @@ class MyApp extends StatelessWidget {
           const Color.fromARGB(255, 13, 174, 174),
         ),
       ),
-      home: const LoginPage(title: 'Login'),
+      home: FutureBuilder(
+        future: _fbApp,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print("You have Error!!!");
+            return Text("Something Went Wrong!!!");
+          } else if (snapshot.hasData) {
+            return const LoginPage(title: 'Login');
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
+    // const LoginPage(title: 'Login'),
   }
 }
 

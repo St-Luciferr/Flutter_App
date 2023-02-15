@@ -17,8 +17,8 @@ class InferencePictureScreen extends StatelessWidget {
     File imgfile = File(imagePath);
     Image img = Image.file(imgfile);
 
-    double height = MediaQuery.of(context).size.height - 300;
-    double width = MediaQuery.of(context).size.width;
+    double height = 524;
+    double width = 392;
     debugPrint("height: $height\twidth: $width");
 
     return Scaffold(
@@ -115,6 +115,10 @@ class RectanglePainter extends CustomPainter {
     canvas.drawLine(Offset(a, c), Offset(a, d), paint);
     canvas.drawLine(Offset(b, c), Offset(b, d), paint);
     canvas.drawLine(Offset(b, d), Offset(a, d), paint);
+    // canvas.drawLine(Offset(x, y), Offset(w, y), paint);
+    // canvas.drawLine(Offset(x, y), Offset(x, h), paint);
+    // canvas.drawLine(Offset(w, y), Offset(w, h), paint);
+    // canvas.drawLine(Offset(x, h), Offset(w, h), paint);
   }
 
   @override
