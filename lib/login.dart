@@ -1,7 +1,5 @@
 import 'package:amid/provider/google_sign_in.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
@@ -32,24 +30,24 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body:
-      // Authentication of Google Account ::
+          // Authentication of Google Account ::
 
-      //  StreamBuilder(
-      //   stream: FirebaseAuth.instance.authStateChanges(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //         return const Center(child: CircularProgressIndicator());
-      //     } else if (snapshot.hasData) {
-      //         return const Drawer();
-      //     } else if (snapshot.hasError){
-      //         return const Center(child: Text('something went wrong'));
-      //     } else {
-      //     return const LoginPage(title: '',);
-      //    }
-      //   },
-      // );
-      
-      Container(
+          //  StreamBuilder(
+          //   stream: FirebaseAuth.instance.authStateChanges(),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.connectionState == ConnectionState.waiting) {
+          //         return const Center(child: CircularProgressIndicator());
+          //     } else if (snapshot.hasData) {
+          //         return const Drawer();
+          //     } else if (snapshot.hasError){
+          //         return const Center(child: Text('something went wrong'));
+          //     } else {
+          //     return const LoginPage(title: '',);
+          //    }
+          //   },
+          // );
+
+          Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
@@ -76,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const InputDecoration(
                   // filled: true,
                   // fillColor: Colors.grey,
-                  contentPadding: EdgeInsets.fromLTRB(0, 50, 0, 5),
+                  contentPadding: EdgeInsets.fromLTRB(0, 20, 0, 5),
                   labelText: 'Username',
                   labelStyle: TextStyle(
                     color: Color.fromARGB(255, 6, 95, 95),

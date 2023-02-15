@@ -13,6 +13,7 @@ import 'package:amid/components/inferenced_view.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.camera});
   final CameraDescription camera;
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -20,6 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  late ImagePicker _picker;
   @override
   void initState() {
     super.initState();
@@ -33,6 +35,7 @@ class _HomePageState extends State<HomePage> {
       ResolutionPreset.medium,
     );
     _initializeControllerFuture = _controller.initialize();
+    _picker = ImagePicker();
   }
 
   @override
@@ -150,19 +153,20 @@ class _HomePageState extends State<HomePage> {
                   // icon: const Icon(Icons.upload),
                   icon: const Icon(Icons.cloud_upload_rounded),
                   onPressed: () async {
-                    final ImagePicker _picker = ImagePicker();
                     final XFile? galaryImage =
                         await _picker.pickImage(source: ImageSource.gallery);
                     final galResized = await resizeImage(galaryImage);
                     var rec = await _detectMonument(galResized.path);
-                    File _img = File(galResized.path);
+                    File img = File(galResized.path);
                     var decodedImage =
-                        await decodeImageFromList(_img.readAsBytesSync());
+                        await decodeImageFromList(img.readAsBytesSync());
                     double height = decodedImage.height.toDouble();
                     double width = decodedImage.width.toDouble();
                     debugPrint("height: $height\twidth: $width");
                     _debugPrint(rec);
-                    await Navigator.of(context).push(
+
+                    if (!mounted) return;
+                    Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => InferencePictureScreen(
                           imagePath: galResized.path,

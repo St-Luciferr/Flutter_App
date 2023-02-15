@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             future: _fbApp,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                print("You have Error!!!");
+                debugPrint("You have Error!!!");
                 return const Text("Something Went Wrong!!!");
               } else if (snapshot.hasData) {
                 return const LoginPage(title: 'Login');

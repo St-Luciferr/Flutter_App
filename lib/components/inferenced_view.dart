@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-// import 'dart:ui';
 import 'dart:math';
 import 'package:amid/list_details.dart';
 
@@ -55,6 +54,7 @@ class InferencePictureScreen extends StatelessWidget {
                       h: (monument['rect']['y'] + monument['rect']['h']) *
                           height,
                       image: imgfile,
+                      name: monument['detectedClass'],
                     ),
                     child: Container(),
                   ),
@@ -108,11 +108,13 @@ Route _createRoute(monuments) {
 class RectanglePainter extends CustomPainter {
   double x, y, w, h;
   File image;
+  String name;
   RectanglePainter(
       {required this.x,
       required this.y,
       required this.w,
       required this.h,
+      required this.name,
       required this.image});
 
   @override
@@ -120,14 +122,31 @@ class RectanglePainter extends CustomPainter {
     Paint paint = Paint()
       ..style = PaintingStyle.stroke
       ..color = Colors.red
-      ..strokeWidth = 1;
+      ..strokeWidth = 2;
 
     debugPrint("x: $x\ty: $y\tw: $w\th: $h");
-    // canvas.drawLine(Offset(a, c), Offset(b, c), paint);
-    // canvas.drawLine(Offset(a, c), Offset(a, d), paint);
-    // canvas.drawLine(Offset(b, c), Offset(b, d), paint);
-    // canvas.drawLine(Offset(b, d), Offset(a, d), paint);
-    // canvas.drawLine(Offset(0, 0), Offset(0, 10), paint);
+    final textSpan = TextSpan(
+      text: name,
+      style: const TextStyle(
+        fontSize: 11,
+        color: Colors.red,
+      ),
+    );
+    final textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout(
+      minWidth: 0,
+      maxWidth: size.width,
+    );
+    final Offset offSet;
+    if (y > 15) {
+      offSet = Offset(x + 5, y - 14);
+    } else {
+      offSet = Offset(x + 5, h + 1);
+    }
+    textPainter.paint(canvas, offSet);
     canvas.drawLine(Offset(x, y), Offset(w, y), paint);
     canvas.drawLine(Offset(x, y), Offset(x, h), paint);
     canvas.drawLine(Offset(w, y), Offset(w, h), paint);
