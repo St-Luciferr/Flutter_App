@@ -2,7 +2,6 @@ import 'package:amid/provider/google_sign_in.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -36,11 +35,11 @@ class MyApp extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 print("You have Error!!!");
-                return Text("Something Went Wrong!!!");
+                return const Text("Something Went Wrong!!!");
               } else if (snapshot.hasData) {
                 return const LoginPage(title: 'Login');
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }

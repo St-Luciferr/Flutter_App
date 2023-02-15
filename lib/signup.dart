@@ -46,7 +46,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 validator: (value) {
                   if (value?.isEmpty == true) {
-                    return 'Please Enter Username*';
+                    return 'Please Enter Username';
                   }
                   if (value != null && value.length < 4) {
                     return 'Username must be at least 4 characters long';

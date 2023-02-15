@@ -1,13 +1,11 @@
 import 'dart:math';
 import 'dart:io';
 import 'dart:async';
-import 'package:amid/login.dart';
-import 'package:amid/signup.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:amid/components/app_bar_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'list_details.dart';
 import 'package:amid/components/inferenced_view.dart';
 
@@ -48,7 +46,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
-
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -74,7 +71,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -117,7 +113,50 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.camera_alt),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Container(height: 50.0),
+        child: SizedBox(
+          height: 60.0,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              createIcon(Icons.flash_on),
+              const Spacer(),
+              Container(
+                margin: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+                // padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  color: const Color.fromARGB(255, 13, 174, 174),
+                  border: Border.all(
+                    width: 4,
+                    color: const Color.fromARGB(255, 50, 196, 210),
+                  ),
+                ),
+                child: IconButton(
+                  alignment: Alignment.center,
+                  tooltip: 'Upload',
+                  iconSize: 30,
+                  color: Colors.white,
+                  // icon: const Icon(Icons.upload),
+                  icon: const Icon(Icons.add_photo_alternate),
+                  onPressed: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? galaryImage =
+                        await _picker.pickImage(source: ImageSource.gallery);
+                    var rec = await _detectMonument(galaryImage!.path);
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => InferencePictureScreen(
+                          imagePath: galaryImage.path,
+                          monuments: rec!,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
