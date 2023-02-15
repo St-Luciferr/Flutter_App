@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "753540561905",
+    "project_id": "amid-login",
+    "storage_bucket": "amid-login.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753540561905:android:89ae189a9f715cf092a250",
+        "android_client_info": {
+          "package_name": "com.example.amid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753540561905-06k7130pvhhovethoil362ppef0uhpjj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq8xJbqGFgPtaM6W--MyU_OqPadzhirF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753540561905-06k7130pvhhovethoil362ppef0uhpjj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "753540561905-beub58dv3tt1bsko9im230rse425gcdb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.amid"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
