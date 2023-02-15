@@ -1,13 +1,11 @@
 import 'package:amid/provider/google_sign_in.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
 import 'signup.dart';
 import 'home_page.dart';
-import 'package:flutter/cupertino.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -31,25 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body:
-      // Authentication of Google Account ::
-
-      //  StreamBuilder(
-      //   stream: FirebaseAuth.instance.authStateChanges(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //         return const Center(child: CircularProgressIndicator());
-      //     } else if (snapshot.hasData) {
-      //         return const Drawer();
-      //     } else if (snapshot.hasError){
-      //         return const Center(child: Text('something went wrong'));
-      //     } else {
-      //     return const LoginPage(title: '',);
-      //    }
-      //   },
-      // );
-      
-      Container(
+      body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
@@ -118,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
                 validator: (value) {
                   if (value?.isEmpty == true) {
-                    return 'Please Enter Password';
+                    return 'Please Enter Password*';
                   }
                   if (value != null && value.length < 8) {
                     return 'Password length should be at least 8 characters';
@@ -196,18 +176,24 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                icon: const Icon(
-                  CupertinoIcons.at_circle,
-                  // color: Color.fromARGB(255, 202, 60, 60),
-                ),
+                icon: const Icon(Icons.alternate_email_outlined),
                 label: const Text(
                   'Sign Up with Google',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   final provider =
                       Provider.of<GoogleSignInProvider>(context, listen: false);
                   provider.googleLogin();
+                  final cameras = await availableCameras();
+                  final camera = cameras.first;
+                  if (mounted) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(camera: camera),
+                      ),
+                    );
+                  }
                 },
               ),
               TextButton(
