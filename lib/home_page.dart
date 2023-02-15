@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:io';
 import 'dart:async';
 import 'package:amid/components/app_bar_icons.dart';
+import 'package:amid/resize_image.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(title: const Text('Home')),
       drawer: Drawer(
         child: ListView(
@@ -93,16 +95,24 @@ class _HomePageState extends State<HomePage> {
             // Attempt to take a picture and get the file `image`
             // where it was saved.
             final image = await _controller.takePicture();
+            final resizedImage = await resizeImage(image);
+            File img = File(resizedImage.path);
+            var recognitions = await _detectMonument(resizedImage.path);
+            var decodedImage = await decodeImageFromList(img.readAsBytesSync());
+            double height = decodedImage.height.toDouble();
+            double width = decodedImage.width.toDouble();
+            debugPrint("height: $height\twidth: $width");
             // run model on taken picture and send result on debug print
-            var recognitions = await _detectMonument(image.path);
             _debugPrint(recognitions);
             if (!mounted) return;
             // If the picture was taken, display it on a new screen.
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => InferencePictureScreen(
-                  imagePath: image.path,
+                  imagePath: resizedImage.path,
                   monuments: recognitions!,
+                  height: height,
+                  width: width,
                 ),
               ),
             );
@@ -113,6 +123,7 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.camera_alt),
       ),
       bottomNavigationBar: BottomAppBar(
+        // color: const Color.fromARGB(0, 255, 255, 255),
         child: SizedBox(
           height: 60.0,
           child: Row(
@@ -137,17 +148,27 @@ class _HomePageState extends State<HomePage> {
                   iconSize: 30,
                   color: Colors.white,
                   // icon: const Icon(Icons.upload),
-                  icon: const Icon(Icons.add_photo_alternate),
+                  icon: const Icon(Icons.cloud_upload_rounded),
                   onPressed: () async {
                     final ImagePicker _picker = ImagePicker();
                     final XFile? galaryImage =
                         await _picker.pickImage(source: ImageSource.gallery);
-                    var rec = await _detectMonument(galaryImage!.path);
+                    final galResized = await resizeImage(galaryImage);
+                    var rec = await _detectMonument(galResized.path);
+                    File _img = File(galResized.path);
+                    var decodedImage =
+                        await decodeImageFromList(_img.readAsBytesSync());
+                    double height = decodedImage.height.toDouble();
+                    double width = decodedImage.width.toDouble();
+                    debugPrint("height: $height\twidth: $width");
+                    _debugPrint(rec);
                     await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => InferencePictureScreen(
-                          imagePath: galaryImage.path,
+                          imagePath: galResized.path,
                           monuments: rec!,
+                          height: height,
+                          width: width,
                         ),
                       ),
                     );

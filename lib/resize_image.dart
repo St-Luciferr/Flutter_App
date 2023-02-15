@@ -5,9 +5,8 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 Future<XFile> resizeImage(img) async {
   // ImageProperties properties =
   //     await FlutterNativeImage.getImageProperties(img.path);
-
   File compressedFile = await FlutterNativeImage.compressImage(img.path,
-      quality: 90, targetWidth: 300, targetHeight: 300);
+      quality: 100, targetWidth: 392, targetHeight: 524);
 
   // delete original file
   try {
