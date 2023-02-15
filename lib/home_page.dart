@@ -2,7 +2,9 @@ import 'dart:math';
 import 'dart:io';
 import 'dart:async';
 import 'package:amid/components/app_bar_icons.dart';
+import 'package:amid/login.dart';
 import 'package:amid/resize_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
@@ -11,7 +13,7 @@ import 'list_details.dart';
 import 'package:amid/components/inferenced_view.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.camera});
+  HomePage({super.key, required this.camera});
   final CameraDescription camera;
 
   @override
@@ -46,20 +48,57 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(title: const Text('Home')),
+      body: Column(
+        children: [
+          FutureBuilder<void>(
+            future: _initializeControllerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                // If the Future is complete, display the preview.
+                return CameraPreview(_controller);
+              } else {
+                // Otherwise, display a loading indicator.
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ],
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+             DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
+              ), 
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(user.photoURL!),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    user.displayName!,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    user.email!,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+
+                ],
               ),
-              child: Text('Drawer Header'),
+            
             ),
             ListTile(
               title: const Text('Item 1'),
@@ -75,18 +114,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the Future is complete, display the preview.
-            return CameraPreview(_controller);
-          } else {
-            // Otherwise, display a loading indicator.
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
