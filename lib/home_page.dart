@@ -1,12 +1,9 @@
-import 'dart:math';
-import 'dart:io';
 import 'dart:async';
 import 'package:amid/components/app_bar_icons.dart';
 import 'package:amid/components/inferenced_view.dart';
 import 'package:amid/login.dart';
 import 'package:amid/utility/process_image.dart';
-import 'list_details.dart';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
@@ -25,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   late ImagePicker _picker;
+  bool _imgLoading = false;
   @override
   void initState() {
     super.initState();
@@ -53,173 +51,189 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: const Text('Home')),
-      body: Column(
-        children: [
-          FutureBuilder<void>(
-            future: _initializeControllerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                // If the Future is complete, display the preview.
-                return CameraPreview(_controller);
-              } else {
-                // Otherwise, display a loading indicator.
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+    if (_imgLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(title: const Text('Home')),
+        body: Column(
           children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage:
-                        NetworkImage(user == null ? '' : user!.photoURL!),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user == null ? '' : user!.displayName!,
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user == null ? '' : user!.email!,
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Logout'),
-              onTap: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(title: 'Login'),
-                  ),
-                );
+            FutureBuilder<void>(
+              future: _initializeControllerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // If the Future is complete, display the preview.
+                  return CameraPreview(_controller);
+                } else {
+                  // Otherwise, display a loading indicator.
+                  return const Center(child: CircularProgressIndicator());
+                }
               },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
-            XFile image = await _controller.takePicture();
-            image = await rotateImg(image.path);
-
-            var recognitions = await _detectMonument(image.path);
-            final resizedImage = await resizeImage(image);
-            File img = File(resizedImage.path);
-            var decodedImage = await decodeImageFromList(img.readAsBytesSync());
-            double height = decodedImage.height.toDouble();
-            double width = decodedImage.width.toDouble();
-            debugPrint("height: $height\twidth: $width");
-            // run model on taken picture and send result on debug print
-            _debugPrint(recognitions);
-            if (!mounted) return;
-            // If the picture was taken, display it on a new screen.
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => InferencePictureScreen(
-                  imagePath: resizedImage.path,
-                  monuments: recognitions!,
-                  height: height,
-                  width: width,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage:
+                          NetworkImage(user == null ? '' : user!.photoURL!),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      user == null ? '' : user!.displayName!,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      user == null ? '' : user!.email!,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
-            );
-          } catch (e) {
-            debugPrint(e.toString());
-          }
-        },
-        child: const Icon(Icons.camera_alt),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        // color: const Color.fromARGB(0, 255, 255, 255),
-        child: SizedBox(
-          height: 60.0,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              createIcon(Icons.flash_on),
-              const Spacer(),
-              Container(
-                margin: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-                // padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  color: const Color.fromARGB(255, 13, 174, 174),
-                  border: Border.all(
-                    width: 4,
-                    color: const Color.fromARGB(255, 50, 196, 210),
-                  ),
-                ),
-                child: IconButton(
-                  alignment: Alignment.center,
-                  tooltip: 'Upload',
-                  iconSize: 30,
-                  color: Colors.white,
-                  // icon: const Icon(Icons.upload),
-                  icon: const Icon(Icons.cloud_upload_rounded),
-                  onPressed: () async {
-                    XFile? galaryImage =
-                        await _picker.pickImage(source: ImageSource.gallery);
-                    galaryImage = await rotateImg(galaryImage!.path);
-                    var rec = await _detectMonument(galaryImage.path);
-                    final galResized = await resizeImage(galaryImage);
-                    File img = File(galResized.path);
-                    var decodedImage =
-                        await decodeImageFromList(img.readAsBytesSync());
-                    double height = decodedImage.height.toDouble();
-                    double width = decodedImage.width.toDouble();
-                    debugPrint("height: $height\twidth: $width");
-                    _debugPrint(rec);
-
-                    if (!mounted) return;
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => InferencePictureScreen(
-                          imagePath: galResized.path,
-                          monuments: rec!,
-                          height: height,
-                          width: width,
-                        ),
-                      ),
-                    );
-                  },
-                ),
+              ListTile(
+                title: const Text('Item 1'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Logout'),
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(title: 'Login'),
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            //to show loading screen while inference is ran
+            setState(() {
+              _imgLoading = true;
+            });
+            // Take the Picture in a try / catch block. If anything goes wrong,
+            // catch the error.
+            try {
+              // Ensure that the camera is initialized.
+              await _initializeControllerFuture;
+              // Attempt to take a picture and get the file `image`
+              // where it was saved.
+              XFile image = await _controller.takePicture();
+              image = await rotateImg(image.path);
+
+              var recognitions = await _detectMonument(image.path);
+              final resizedImage = await resizeImage(image);
+              // File img = File(resizedImage.path);
+              // var decodedImage =
+              //     await decodeImageFromList(img.readAsBytesSync());
+              // double height = decodedImage.height.toDouble();
+              // double width = decodedImage.width.toDouble();
+              // debugPrint("height: $height\twidth: $width");
+
+              // run model on taken picture and send result on debug print
+              _debugPrint(recognitions);
+
+              //to show inference results
+              setState(() {
+                _imgLoading = false;
+              });
+              if (!mounted) return;
+              // If the picture was taken, display it on a new screen.
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => InferencePictureScreen(
+                    imagePath: resizedImage.path,
+                    monuments: recognitions!,
+                    height: 514,
+                    width: 392,
+                  ),
+                ),
+              );
+            } catch (e) {
+              debugPrint(e.toString());
+            }
+          },
+          child: const Icon(Icons.camera_alt),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          // color: const Color.fromARGB(0, 255, 255, 255),
+          child: SizedBox(
+            height: 60.0,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                createIcon(Icons.flash_on),
+                const Spacer(),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+                  // padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28),
+                    color: const Color.fromARGB(255, 13, 174, 174),
+                    border: Border.all(
+                      width: 4,
+                      color: const Color.fromARGB(255, 50, 196, 210),
+                    ),
+                  ),
+                  child: IconButton(
+                    alignment: Alignment.center,
+                    tooltip: 'Upload',
+                    iconSize: 30,
+                    color: Colors.white,
+                    // icon: const Icon(Icons.upload),
+                    icon: const Icon(Icons.cloud_upload_rounded),
+                    onPressed: () async {
+                      setState(() {
+                        _imgLoading = true;
+                      });
+                      XFile? galaryImage =
+                          await _picker.pickImage(source: ImageSource.gallery);
+                      galaryImage = await rotateImg(galaryImage!.path);
+                      var rec = await _detectMonument(galaryImage.path);
+                      final galResized = await resizeImage(galaryImage);
+                      _debugPrint(rec);
+                      setState(() {
+                        _imgLoading = false;
+                      });
+                      if (!mounted) return;
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => InferencePictureScreen(
+                            imagePath: galResized.path,
+                            monuments: rec!,
+                            height: 524,
+                            width: 392,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      );
+    }
   }
 }
 
@@ -238,7 +252,7 @@ Future<List<dynamic>?> _detectMonument(String imgPath) async {
 //function to laod tflite model
 Future<void> _inittfModel() async {
   String? res = await Tflite.loadModel(
-      model: "assets/monumentModel0.tflite",
+      model: "assets/monumentModel.tflite",
       labels: "assets/labels.txt",
       numThreads: 1, // defaults to 1
       // defaults to true, set to false to load resources outside assets
@@ -253,79 +267,16 @@ Future<void> _closetfModel() async {
 }
 
 void _debugPrint(var rec) {
+  if (!kDebugMode) {
+    return;
+  }
   String output = "";
   for (var item in rec) {
-    output +=
-        "${item['detectedClass']}: ${item['confidenceInClass']} '\nx: '${item['rect']['x']} '\ty: '${item['rect']['y']} '\tw: '${item['rect']['w']} '\th: '${item['rect']['h']}\n";
+    output += "${item['detectedClass']}: ${item['confidenceInClass']} '\n"
+        "x: '${item['rect']['x']} '\t"
+        "y: '${item['rect']['y']} '\t"
+        "w: '${item['rect']['w']} '\t"
+        "h: '${item['rect']['h']}\n";
   }
   debugPrint(output);
-}
-
-// A widget that displays the picture taken by the user.
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
-  final List<dynamic> monuments;
-  const DisplayPictureScreen(
-      {super.key, required this.imagePath, required this.monuments});
-
-  // for (var item in rec) {}
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Inference Results')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/homepage.jpg'), fit: BoxFit.fill),
-        ),
-        padding: const EdgeInsets.all(0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.file(File(imagePath)),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: BottomAppBar(
-                child: OutlinedButton(
-                  onPressed: () =>
-                      {Navigator.of(context).push(_createRoute(monuments))},
-                  child: SizedBox(
-                    height: 60.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: Transform.rotate(
-                      angle: pi,
-                      child: const Icon(Icons.expand_circle_down),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-Route _createRoute(monuments) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        ListViews(monuments: monuments),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.easeIn;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }
