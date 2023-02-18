@@ -15,14 +15,11 @@ class GoogleSignInProvider extends ChangeNotifier {
     _user = googleUser;
 
     final googleAuth = await googleUser.authentication;
-
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
     await FirebaseAuth.instance.signInWithCredential(credential);
-
     notifyListeners();
   }
 }

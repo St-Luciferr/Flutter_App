@@ -8,6 +8,8 @@ Future<XFile> resizeImage(img) async {
   final File compressedFile;
   ImageProperties properties =
       await FlutterNativeImage.getImageProperties(img.path);
+  debugPrint(
+      "Before Resize:\nHeight: ${properties.height}\tWidth: ${properties.width}");
   if (properties.orientation == ImageOrientation.undefined ||
       properties.orientation == ImageOrientation.normal) {
     compressedFile = await FlutterNativeImage.compressImage(img.path,
@@ -29,6 +31,12 @@ Future<XFile> resizeImage(img) async {
   } catch (e) {
     debugPrint("\nError in deleting original image\n");
     // Error in getting access to the file.
+  }
+  if (kDebugMode) {
+    properties =
+        await FlutterNativeImage.getImageProperties(compressedFile.path);
+    debugPrint(
+        "After Resize:\nHeight: ${properties.height}\tWidth: ${properties.width}");
   }
 
   return XFile(compressedFile.path);
@@ -53,11 +61,9 @@ Future<XFile> rotateImg(imagePath) async {
     return XFile(originalFile.path);
   } else {
     debugPrint('Rotating image necessary');
-    // We'll use the exif package to read exif data
-    // This is map of several exif properties
     imageBytes = await originalFile.readAsBytes();
     originalImage = img.decodeImage(Uint8List.fromList(imageBytes));
-    // rotate
+    // rotate just to remove orientation property from image
     if (properties.orientation == ImageOrientation.rotate90) {
       fixedImage = img.copyRotate(originalImage!, angle: 0);
     } else if (properties.orientation == ImageOrientation.rotate180) {
