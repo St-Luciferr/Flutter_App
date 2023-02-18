@@ -1,43 +1,41 @@
 {
   "project_info": {
-    "project_number": "175778225776",
-    "project_id": "flutter-app-67287",
-    "firebase_url": "https://flutter-app-67287-default-rtdb.asia-southeast1.firebasedatabase.app/",
-    "storage_bucket": "flutter-app-67287.appspot.com"
+    "project_number": "753540561905",
+    "project_id": "amid-login",
+    "storage_bucket": "amid-login.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:175778225776:android:bf6d6faff7e3779d5bdeb5",
+        "mobilesdk_app_id": "1:753540561905:android:89ae189a9f715cf092a250",
         "android_client_info": {
           "package_name": "com.example.amid"
         }
       },
       "oauth_client": [
         {
-          "client_id": "175778225776-5bv696898lpriodcteev7a3hisvo294r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.amid",
-            "certificate_hash": "2824261e22002b0432e82cea9d38bce12f9a3622"
-          }
-        },
-        {
-          "client_id": "175778225776-ln22mrl6t4d4in23vsafmekd9ein65ij.apps.googleusercontent.com",
+          "client_id": "753540561905-06k7130pvhhovethoil362ppef0uhpjj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDXsiH4AEVw5yWa4gnjTxEZ0ws5zqb7Yyw"
+          "current_key": "AIzaSyCq8xJbqGFgPtaM6W--MyU_OqPadzhirF0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "175778225776-d5jo5v0ubfrqdvm0gsqmi73kilrfrl0h.apps.googleusercontent.com",
+              "client_id": "753540561905-06k7130pvhhovethoil362ppef0uhpjj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "753540561905-beub58dv3tt1bsko9im230rse425gcdb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.amid"
+              }
             }
           ]
         }

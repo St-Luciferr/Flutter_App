@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   final provider =
                       Provider.of<GoogleSignInProvider>(context, listen: false);
-                  await provider.googleLogin();
+                  provider.googleLogin();
                   final cameras = await availableCameras();
                   final camera = cameras.first;
                   if (mounted) {

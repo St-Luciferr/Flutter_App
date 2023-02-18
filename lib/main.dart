@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'firebase_options.dart';
 
 import 'login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -31,10 +34,9 @@ class MyApp extends StatelessWidget {
             future: _fbApp,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                debugPrint("\nYou have Error!!!\n");
+                debugPrint("You have Error!!!");
                 return const Text("Something Went Wrong!!!");
               } else if (snapshot.hasData) {
-                debugPrint('\nfirebase has data\n');
                 return const LoginPage(title: 'Login');
               } else {
                 return const Center(

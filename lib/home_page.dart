@@ -2,18 +2,18 @@ import 'dart:math';
 import 'dart:io';
 import 'dart:async';
 import 'package:amid/components/app_bar_icons.dart';
-import 'package:amid/components/inferenced_view.dart';
+import 'package:amid/login.dart';
 import 'package:amid/resize_image.dart';
-import 'list_details.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'list_details.dart';
+import 'package:amid/components/inferenced_view.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.camera});
+  HomePage({super.key, required this.camera});
   final CameraDescription camera;
 
   @override
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  final user = FirebaseAuth.instance.currentUser;
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -75,29 +75,30 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
+             DrawerHeader(
               decoration: const BoxDecoration(
                 color: Colors.blue,
-              ),
+              ), 
               child: Column(
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage:
-                        NetworkImage(user == null ? '' : user!.photoURL!),
+                    backgroundImage: NetworkImage(user.photoURL!),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    user == null ? '' : user!.displayName!,
+                    user.displayName!,
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    user == null ? '' : user!.email!,
+                    user.email!,
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
+
                 ],
               ),
+            
             ),
             ListTile(
               title: const Text('Item 1'),
@@ -229,7 +230,7 @@ Future<List<dynamic>?> _detectMonument(String imgPath) async {
 //function to laod tflite model
 Future<void> _inittfModel() async {
   String? res = await Tflite.loadModel(
-      model: "assets/monumentModel1.tflite",
+      model: "assets/monumentModel.tflite",
       labels: "assets/labels.txt",
       numThreads: 1, // defaults to 1
       // defaults to true, set to false to load resources outside assets
