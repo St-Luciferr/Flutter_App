@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:amid/components/app_bar_icons.dart';
 import 'package:amid/components/inferenced_view.dart';
+import 'package:amid/login.dart';
 import 'package:amid/resize_image.dart';
 import 'list_details.dart';
 
@@ -106,9 +107,14 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              title: const Text('Item 2'),
+              title: const Text('Logout'),
               onTap: () {
-                Navigator.pop(context);
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(title: 'Login'),
+                  ),
+                );
               },
             ),
           ],
@@ -123,10 +129,12 @@ class _HomePageState extends State<HomePage> {
             await _initializeControllerFuture;
             // Attempt to take a picture and get the file `image`
             // where it was saved.
-            final image = await _controller.takePicture();
+            XFile image = await _controller.takePicture();
+            image = await rotateImg(image.path);
+
+            var recognitions = await _detectMonument(image.path);
             final resizedImage = await resizeImage(image);
             File img = File(resizedImage.path);
-            var recognitions = await _detectMonument(resizedImage.path);
             var decodedImage = await decodeImageFromList(img.readAsBytesSync());
             double height = decodedImage.height.toDouble();
             double width = decodedImage.width.toDouble();
@@ -179,10 +187,11 @@ class _HomePageState extends State<HomePage> {
                   // icon: const Icon(Icons.upload),
                   icon: const Icon(Icons.cloud_upload_rounded),
                   onPressed: () async {
-                    final XFile? galaryImage =
+                    XFile? galaryImage =
                         await _picker.pickImage(source: ImageSource.gallery);
+                    galaryImage = await rotateImg(galaryImage!.path);
+                    var rec = await _detectMonument(galaryImage.path);
                     final galResized = await resizeImage(galaryImage);
-                    var rec = await _detectMonument(galResized.path);
                     File img = File(galResized.path);
                     var decodedImage =
                         await decodeImageFromList(img.readAsBytesSync());
@@ -229,7 +238,7 @@ Future<List<dynamic>?> _detectMonument(String imgPath) async {
 //function to laod tflite model
 Future<void> _inittfModel() async {
   String? res = await Tflite.loadModel(
-      model: "assets/monumentModel1.tflite",
+      model: "assets/monumentModel0.tflite",
       labels: "assets/labels.txt",
       numThreads: 1, // defaults to 1
       // defaults to true, set to false to load resources outside assets
