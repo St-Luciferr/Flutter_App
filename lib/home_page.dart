@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:amid/components/app_bar_icons.dart';
 import 'package:amid/components/inferenced_view.dart';
 import 'package:amid/login.dart';
-import 'package:amid/resize_image.dart';
+import 'package:amid/utility/process_image.dart';
 import 'list_details.dart';
 
 import 'package:flutter/material.dart';
