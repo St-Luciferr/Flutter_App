@@ -81,6 +81,8 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite:0.1.100'
     implementation platform('com.google.firebase:firebase-bom:31.2.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     // implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:0.1.100'
 

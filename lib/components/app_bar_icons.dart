@@ -1,6 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 Widget createIcon(IconData iconName) {
+  int _count = 0;
   return Container(
     margin: const EdgeInsets.fromLTRB(10, 2, 10, 2),
     // padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
@@ -19,7 +21,13 @@ Widget createIcon(IconData iconName) {
       color: Colors.white,
       // icon: const Icon(Icons.upload),
       icon: Icon(iconName),
-      onPressed: () {},
+      onPressed: () {
+        _count++;
+        DatabaseReference _firedbRef =
+            FirebaseDatabase.instance.ref().child('test');
+        _firedbRef.set('Pressed $_count times');
+        debugPrint('Pressed $_count times');
+      },
     ),
   );
 }
