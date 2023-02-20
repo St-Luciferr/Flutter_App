@@ -9,6 +9,7 @@ import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.camera});
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   late Future<void> _initializeControllerFuture;
   late ImagePicker _picker;
   bool _imgLoading = false;
+  bool _yolo = false;
   @override
   void initState() {
     super.initState();
@@ -141,6 +143,10 @@ class _HomePageState extends State<HomePage> {
 
               var recognitions = await _detectMonument(image.path);
               final resizedImage = await resizeImage(image);
+              if (_yolo) {
+                var yoloResponse = await _yoloModel(image.path);
+                debugPrint(yoloResponse.toString());
+              }
               // File img = File(resizedImage.path);
               // var decodedImage =
               //     await decodeImageFromList(img.readAsBytesSync());
@@ -180,7 +186,49 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                createIcon(Icons.flash_on),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+                  // padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28),
+                    color: const Color.fromARGB(255, 13, 174, 174),
+                    border: Border.all(
+                      width: 4,
+                      color: const Color.fromARGB(255, 50, 196, 210),
+                    ),
+                  ),
+                  child: IconButton(
+                    alignment: Alignment.center,
+                    tooltip: 'YoLo',
+                    iconSize: 30,
+                    color: Colors.white,
+                    // icon: const Icon(Icons.upload),
+                    icon: Icon(_yolo ? Icons.toggle_on : Icons.toggle_off),
+                    onPressed: () async {
+                      if (_yolo) {
+                        setState(() {
+                          _yolo = false;
+                        });
+                      } else {
+                        setState(() {
+                          _yolo = true;
+                        });
+                        if (!mounted) return;
+                      }
+                    },
+                  ),
+                ),
+                //yolo text
+                const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'YOLO',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 13, 174, 174),
+                    ),
+                  ),
+                ),
+                // createIcon(Icons.flash_on),
                 const Spacer(),
                 Container(
                   margin: const EdgeInsets.fromLTRB(10, 2, 10, 2),
@@ -247,6 +295,22 @@ Future<List<dynamic>?> _detectMonument(String imgPath) async {
       numResultsPerClass: 1,
       asynch: true);
   return recognitions;
+}
+
+Future<Response<dynamic>?> _yoloModel(String imagePath) async {
+  final formData = FormData.fromMap({
+    'img': MultipartFile.fromFileSync(
+      imagePath,
+      filename: imagePath.split('/').last,
+    ),
+  });
+  final response = Dio().post(
+    'https://detectmonuments.azurewebsites.net/api/',
+    data: formData,
+    onSendProgress: (count, total) =>
+        debugPrint('\nsent: $count\ttotal: $total\n'),
+  );
+  return response;
 }
 
 //function to laod tflite model
