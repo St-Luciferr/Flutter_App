@@ -54,7 +54,9 @@ class InferencePictureScreen extends StatelessWidget {
                       h: (monument['rect']['y'] + monument['rect']['h']) *
                           height,
                       image: imgfile,
-                      name: monument['detectedClass'],
+                      name: monument['detectedClass'] ??
+                          monument['DetectedClass'] ??
+                          'null',
                     ),
                     child: Container(),
                   ),

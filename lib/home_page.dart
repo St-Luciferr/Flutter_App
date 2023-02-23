@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   final user = FirebaseAuth.instance.currentUser;
-
+  List<dynamic>? rec;
   @override
   Widget build(BuildContext context) {
     if (_imgLoading) {
@@ -146,14 +146,10 @@ class _HomePageState extends State<HomePage> {
               if (_yolo) {
                 var yoloResponse = await _yoloModel(image.path);
                 debugPrint(yoloResponse.toString());
+                rec = yoloResponse?.data['predictions'][0];
+              } else {
+                rec = await _detectMonument(image.path);
               }
-              // File img = File(resizedImage.path);
-              // var decodedImage =
-              //     await decodeImageFromList(img.readAsBytesSync());
-              // double height = decodedImage.height.toDouble();
-              // double width = decodedImage.width.toDouble();
-              // debugPrint("height: $height\twidth: $width");
-
               // run model on taken picture and send result on debug print
               _debugPrint(recognitions);
 
@@ -255,8 +251,16 @@ class _HomePageState extends State<HomePage> {
                       XFile? galaryImage =
                           await _picker.pickImage(source: ImageSource.gallery);
                       galaryImage = await rotateImg(galaryImage!.path);
-                      var rec = await _detectMonument(galaryImage.path);
                       final galResized = await resizeImage(galaryImage);
+                      if (_yolo) {
+                        var yoloResponse = await _yoloModel(galaryImage.path);
+                        debugPrint(yoloResponse.toString());
+                        rec = yoloResponse?.data['predictions'];
+                        debugPrint(rec.runtimeType.toString());
+                        debugPrint(yoloResponse!.headers.toString());
+                      } else {
+                        rec = await _detectMonument(galaryImage.path);
+                      }
                       _debugPrint(rec);
                       setState(() {
                         _imgLoading = false;
@@ -336,7 +340,8 @@ void _debugPrint(var rec) {
   }
   String output = "";
   for (var item in rec) {
-    output += "${item['detectedClass']}: ${item['confidenceInClass']} '\n"
+    output +=
+        "${item['detectedClass'] ?? item['DetectedClass'] ?? 'null'}: ${item['confidenceInClass']} '\n"
         "x: '${item['rect']['x']} '\t"
         "y: '${item['rect']['y']} '\t"
         "w: '${item['rect']['w']} '\t"

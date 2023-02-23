@@ -30,7 +30,7 @@ class _ListViewsState extends State<ListViews> {
                       width: 150),
                 ),
                 Text(
-                    "Detected Monument: ${monument['detectedClass']} \nConfidence Score: ${monument['confidenceInClass']}",
+                    "Detected Monument: ${monument['detectedClass'] ?? monument['DetectedClass'] ?? 'null'} \nConfidence Score: ${monument['confidenceInClass']}",
                     textAlign: TextAlign.left),
                 const Text('Date of Construction: 2056/01/24',
                     textAlign: TextAlign.left),
