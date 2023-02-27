@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ListViews extends StatefulWidget {
   const ListViews({super.key, required this.monuments});
@@ -8,6 +9,7 @@ class ListViews extends StatefulWidget {
 }
 
 class _ListViewsState extends State<ListViews> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

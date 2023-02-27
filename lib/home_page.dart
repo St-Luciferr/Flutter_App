@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:amid/components/app_bar_icons.dart';
 import 'package:amid/components/inferenced_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:amid/login.dart';
 import 'package:amid/utility/process_image.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   late ImagePicker _picker;
   bool _imgLoading = false;
   bool _yolo = false;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   void initState() {
     super.initState();
@@ -49,8 +52,18 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  void getData() {
+    firestore.collection('test').get().then((QuerySnapshot querySnapshot) {
+      for (dynamic doc in querySnapshot.docs) {
+        debugPrint(doc["name"]);
+        debugPrint(doc["number"].toString());
+        debugPrint(doc["username"]);
+      }
+    });
+  }
+
   final user = FirebaseAuth.instance.currentUser;
-  List<dynamic>? rec;
+  dynamic rec;
   @override
   Widget build(BuildContext context) {
     if (_imgLoading) {
@@ -144,7 +157,12 @@ class _HomePageState extends State<HomePage> {
               var recognitions = await _detectMonument(image.path);
               final resizedImage = await resizeImage(image);
               if (_yolo) {
+                final stopwatch = Stopwatch();
+                stopwatch.start();
                 var yoloResponse = await _yoloModel(image.path);
+                stopwatch.stop();
+                debugPrint(
+                    "response time: ${stopwatch.elapsedMilliseconds.toString()}");
                 debugPrint(yoloResponse.toString());
                 rec = yoloResponse?.data['predictions'][0];
               } else {
@@ -157,6 +175,8 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 _imgLoading = false;
               });
+
+              getData();
               if (!mounted) return;
               // If the picture was taken, display it on a new screen.
               await Navigator.of(context).push(
@@ -320,7 +340,7 @@ Future<Response<dynamic>?> _yoloModel(String imagePath) async {
 //function to laod tflite model
 Future<void> _inittfModel() async {
   String? res = await Tflite.loadModel(
-      model: "assets/monumentModel.tflite",
+      model: "assets/monument512.tflite",
       labels: "assets/labels.txt",
       numThreads: 1, // defaults to 1
       // defaults to true, set to false to load resources outside assets
