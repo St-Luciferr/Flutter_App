@@ -1,3 +1,4 @@
+import 'package:amid/home_page.dart';
 import 'package:amid/provider/google_sign_in.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (context) => GoogleSignInProvider(),
         child: MaterialApp(
+          // scaffoldMessengerKey: SnackbarGlobal.key,
           title: 'Amid',
           theme: ThemeData(
             primarySwatch: createMaterialColor(
@@ -47,7 +49,6 @@ class MyApp extends StatelessWidget {
       );
 
   // const LoginPage(title: 'Login'),
-
 }
 
 //creates a matrerial color from color

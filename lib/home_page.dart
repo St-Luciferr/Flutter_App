@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:amid/components/app_bar_icons.dart';
 import 'package:amid/components/inferenced_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -270,6 +269,14 @@ class _HomePageState extends State<HomePage> {
                       });
                       XFile? galaryImage =
                           await _picker.pickImage(source: ImageSource.gallery);
+                      if (!mounted) return;
+                      if (galaryImage == null) {
+                        setState(() {
+                          _imgLoading = false;
+                        });
+
+                        return;
+                      }
                       galaryImage = await rotateImg(galaryImage!.path);
                       final galResized = await resizeImage(galaryImage);
                       if (_yolo) {
@@ -368,4 +375,15 @@ void _debugPrint(var rec) {
         "h: '${item['rect']['h']}\n";
   }
   debugPrint(output);
+}
+
+class SnackbarGlobal {
+  static GlobalKey<ScaffoldMessengerState> key =
+      GlobalKey<ScaffoldMessengerState>();
+
+  static void show(String message) {
+    key.currentState!
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
 }

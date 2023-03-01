@@ -54,6 +54,7 @@ dependencies:
   image: ^4.0.15
   dio: ^5.0.0
   cloud_firestore: ^4.4.3
+  firebase_storage: ^11.0.14
 
       
 dev_dependencies:

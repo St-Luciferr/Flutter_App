@@ -1,8 +1,8 @@
 {
   "project_info": {
     "project_number": "175778225776",
+    "firebase_url": "https://flutter-app-67287-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "flutter-app-67287",
-    "firebase_url": "https://flutter-app-67287-default-rtdb.asia-southeast1.firebasedatabase.app/",
     "storage_bucket": "flutter-app-67287.appspot.com"
   },
   "client": [
@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "175778225776-5bv696898lpriodcteev7a3hisvo294r.apps.googleusercontent.com",
+          "client_id": "175778225776-9mf4sfjok5akoslakdq80e0b9c3lh2g2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.amid",
-            "certificate_hash": "2824261e22002b0432e82cea9d38bce12f9a3622"
+            "certificate_hash": "21d0d1b7c09452e5c6269fbb77fe55663cf90d22"
           }
         },
         {
