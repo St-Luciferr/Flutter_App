@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
-import 'login.dart';
+import 'pages/login.dart';
 import 'package:amid/utility/firestore_data.dart';
 
 Future<void> main() async {
@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: createMaterialColor(
               const Color.fromARGB(255, 13, 174, 174),
+              // const Color.fromARGB(255, 133, 202, ),
             ),
           ),
           home: FutureBuilder(
@@ -48,8 +49,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
       );
-
-  // const LoginPage(title: 'Login'),
 }
 
 //creates a matrerial color from color
