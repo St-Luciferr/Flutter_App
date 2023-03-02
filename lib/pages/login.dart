@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   filled: true,
                   fillColor: const Color.fromARGB(74, 153, 167, 168),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(25.0),
                     borderSide:
                         const BorderSide(width: 0, style: BorderStyle.none),
                   ),
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                   filled: true,
                   fillColor: const Color.fromARGB(74, 153, 167, 168),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(25.0),
                     borderSide:
                         const BorderSide(width: 0, style: BorderStyle.none),
                   ),
