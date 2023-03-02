@@ -15,7 +15,20 @@ class _ListViewsState extends State<ListViews> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String? url;
 
-  Future<String> getImage(String name) {
+  Future<Map<String, dynamic>>? getData(String name) async {
+    dynamic monument;
+    await firestore.collection("monuments").doc(name).get().then((value) {
+      monument = value.data();
+    });
+    return monument;
+  }
+
+  Future<void> getTestData(String name) async {
+    final data = await firestore.collection('test').doc(name).get();
+    debugPrint(data.data().toString());
+  }
+
+  Future<String> getImage(String name) async {
     final imagesRef = storageRef.child("images/$name.JPG");
     return imagesRef.getDownloadURL();
   }
@@ -74,22 +87,72 @@ class _ListViewsState extends State<ListViews> {
                     },
                   ),
                 ),
-                Text(
-                    "Detected Monument: ${monument['detectedClass'] ?? monument['DetectedClass'] ?? 'null'} \nConfidence Score: ${monument['confidenceInClass']}",
-                    textAlign: TextAlign.left),
-                const Text('Date of Construction: 2056/01/24',
-                    textAlign: TextAlign.left),
-                const Text('Constructed By: Santosh Pandey',
-                    textAlign: TextAlign.left),
-                const Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit,'
-                    'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                    'Cursus vitae congue mauris rhoncus. Lectus proin nibh nisl condimentum',
-                    textAlign: TextAlign.justify),
+                // FutureBuilder(
+                //     future: getData("Dattatreya Temple"),
+                //     builder: (context, snapshot) {}),
+                const SizedBox(
+                  height: 20,
+                ),
+                FutureBuilder(
+                  future: getData('Dattatreya Temple'),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      debugPrint(snapshot.data.toString());
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          formattedDetails(
+                            "Monument Name: ",
+                            snapshot.data?['Monument_Name'],
+                          ),
+                          formattedDetails(
+                            "Confidence Score: ",
+                            monument['confidenceInClass'].toString(),
+                          ),
+                          formattedDetails(
+                            "Construction Date: ",
+                            snapshot.data?["Construction_Date"],
+                          ),
+                          formattedDetails(
+                            "Constructed By: ",
+                            snapshot.data?["Constructed_by"],
+                          ),
+                          formattedDetails(
+                            "Detailed Description: ",
+                            snapshot.data?["Detailed_description"],
+                          ),
+                        ],
+                      );
+                    } else
+                      return Container();
+                  },
+                ),
               ],
             ),
         ],
       ),
     );
   }
+}
+
+Widget formattedDetails(String label, String text) {
+  return RichText(
+    textAlign: TextAlign.justify,
+    text: TextSpan(
+        text: label,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+          color: Colors.black,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+            text: text,
+            style: const TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 14,
+            ),
+          ),
+        ]),
+  );
 }

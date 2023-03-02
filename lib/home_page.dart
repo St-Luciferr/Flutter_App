@@ -51,16 +51,6 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void getData() {
-    firestore.collection('test').get().then((QuerySnapshot querySnapshot) {
-      for (dynamic doc in querySnapshot.docs) {
-        debugPrint(doc["name"]);
-        debugPrint(doc["number"].toString());
-        debugPrint(doc["username"]);
-      }
-    });
-  }
-
   final user = FirebaseAuth.instance.currentUser;
   dynamic rec;
   @override
@@ -101,12 +91,12 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage:
-                          NetworkImage(user == null ? '' : user!.photoURL!),
+                      backgroundImage: NetworkImage(
+                          user == null ? '' : user?.photoURL ?? ''),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      user == null ? '' : user!.displayName!,
+                      user == null ? '' : user!.displayName ?? '',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     const SizedBox(height: 8),
@@ -153,7 +143,6 @@ class _HomePageState extends State<HomePage> {
               XFile image = await _controller.takePicture();
               image = await rotateImg(image.path);
 
-              var recognitions = await _detectMonument(image.path);
               final resizedImage = await resizeImage(image);
               if (_yolo) {
                 final stopwatch = Stopwatch();
@@ -163,26 +152,24 @@ class _HomePageState extends State<HomePage> {
                 debugPrint(
                     "response time: ${stopwatch.elapsedMilliseconds.toString()}");
                 debugPrint(yoloResponse.toString());
-                rec = yoloResponse?.data['predictions'][0];
+                rec = yoloResponse?.data['predictions'];
               } else {
                 rec = await _detectMonument(image.path);
               }
               // run model on taken picture and send result on debug print
-              _debugPrint(recognitions);
+              _debugPrint(rec);
 
               //to show inference results
               setState(() {
                 _imgLoading = false;
               });
-
-              getData();
               if (!mounted) return;
               // If the picture was taken, display it on a new screen.
               await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => InferencePictureScreen(
                     imagePath: resizedImage.path,
-                    monuments: recognitions!,
+                    monuments: rec,
                     height: 514,
                     width: 392,
                   ),
@@ -277,7 +264,7 @@ class _HomePageState extends State<HomePage> {
 
                         return;
                       }
-                      galaryImage = await rotateImg(galaryImage!.path);
+                      galaryImage = await rotateImg(galaryImage.path);
                       final galResized = await resizeImage(galaryImage);
                       if (_yolo) {
                         var yoloResponse = await _yoloModel(galaryImage.path);
@@ -297,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                           builder: (context) => InferencePictureScreen(
                             imagePath: galResized.path,
-                            monuments: rec!,
+                            monuments: rec,
                             height: 524,
                             width: 392,
                           ),

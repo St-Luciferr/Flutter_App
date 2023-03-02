@@ -41,7 +41,6 @@ dependencies:
   path_provider: ^2.0.11
   camera: ^0.10.2+1
   path: ^1.8.2
-  mysql1: ^0.20.0
   tflite:
     git:
       url: https://github.com/Despicable-Us/tflite_flutter.git

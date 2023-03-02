@@ -1,4 +1,3 @@
-import 'package:amid/home_page.dart';
 import 'package:amid/provider/google_sign_in.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 import 'login.dart';
+import 'package:amid/utility/firestore_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
                 return const Text("Something Went Wrong!!!");
               } else if (snapshot.hasData) {
                 debugPrint('\nfirebase has data\n');
+                // return const MyHomePage(title: "Add data to Firestore");
                 return const LoginPage(title: 'Login');
               } else {
                 return const Center(

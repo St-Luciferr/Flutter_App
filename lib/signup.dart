@@ -1,6 +1,9 @@
+// import 'package:amid/provider/google_sign_in.dart';
+import 'package:amid/utility/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:amid/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
-import 'login.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key, required this.title});
@@ -13,12 +16,8 @@ class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
   final confirmPasswordController = TextEditingController();
   final passwordController = TextEditingController();
-
-  String? _username;
-  String? _password1;
-  String? _password2;
-  String? _hashedPassword;
-  String? _email;
+  final emailController = TextEditingController();
+  final usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +32,13 @@ class _SignupPageState extends State<SignupPage> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                controller: usernameController,
                 decoration: const InputDecoration(
                   labelText: 'Username',
                   labelStyle: TextStyle(
                     color: Color.fromARGB(255, 6, 95, 95),
                   ),
-                  hintText: 'What do you want to be called here?',
+                  hintText: 'Enter new username',
                   hintStyle: TextStyle(
                     fontSize: 15,
                     color: Color.fromARGB(255, 11, 148, 148),
@@ -54,9 +54,7 @@ class _SignupPageState extends State<SignupPage> {
 
                   return null;
                 },
-                onSaved: (value) {
-                  _username = value!;
-                },
+                onSaved: (value) {},
               ),
               TextFormField(
                   decoration: const InputDecoration(
@@ -84,42 +82,34 @@ class _SignupPageState extends State<SignupPage> {
                     }
                     return null;
                   },
-                  onSaved: (value) {
-                    _password1 = value ?? '';
-                    _hashedPassword =
-                        BCrypt.hashpw(_password1!, BCrypt.gensalt());
-                    _password1 = '';
-                  }),
+                  onSaved: (value) {}),
               TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                    labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 6, 95, 95),
-                    ),
-                    hintText: 'Confirm New Password',
-                    hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Color.fromARGB(255, 11, 148, 148),
-                    ),
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Password',
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 6, 95, 95),
                   ),
-                  obscureText: true,
-                  controller: confirmPasswordController,
-                  validator: (value) {
-                    if (value?.isEmpty == true) {
-                      return 'Please Confirm password*';
-                    }
-                    if (value != passwordController.text) {
-                      return 'Password do not match';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _password2 = value ?? '';
-                    _hashedPassword =
-                        BCrypt.hashpw(_password2!, BCrypt.gensalt());
-                    _password2 = '';
-                  }),
+                  hintText: 'Confirm New Password',
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                ),
+                obscureText: true,
+                controller: confirmPasswordController,
+                validator: (value) {
+                  if (value?.isEmpty == true) {
+                    return 'Please Confirm password*';
+                  }
+                  if (value != passwordController.text) {
+                    return 'Password do not match';
+                  }
+                  return null;
+                },
+                onSaved: (value) {},
+              ),
               TextFormField(
+                controller: emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   labelStyle: TextStyle(
@@ -142,9 +132,7 @@ class _SignupPageState extends State<SignupPage> {
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  _email = value!;
-                },
+                onSaved: (value) {},
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -156,16 +144,30 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 child: const Text('Sign Up'),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
                     // If the form is valid, save the email and password
                     // to the variables and submit the form
-                    debugPrint(_username);
-                    debugPrint(_password1);
-                    debugPrint(_hashedPassword);
-                    debugPrint(_email);
-                    debugPrint(_formKey.currentState.toString());
+                    debugPrint(emailController.text);
+                    debugPrint(passwordController.text);
+
+                    try {
+                      await Auth().createUserWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      debugPrint(e.message);
+                    }
+                  } else {
+                    return;
+                  }
+                  if (mounted) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(title: 'Login'),
+                      ),
+                    );
                   }
                 },
               ),

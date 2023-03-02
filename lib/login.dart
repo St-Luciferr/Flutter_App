@@ -1,4 +1,6 @@
 import 'package:amid/provider/google_sign_in.dart';
+import 'package:amid/utility/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
@@ -18,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   // Create a global key that will uniquely identify the Form widget
   // and allow us to validate the form
   final _formKey = GlobalKey<FormState>();
-
+  bool isAuthenticated = false;
   // Create variables to store the user's email and password
   String _username = '';
   String _password = '';
@@ -127,10 +129,14 @@ class _LoginPageState extends State<LoginPage> {
                     // If the form is valid, save the email and password
                     // to the variables and submit the form
                     _formKey.currentState!.save();
-                    debugPrint(_password);
-                    debugPrint(_username);
-                    debugPrint(_hashedPassword);
-                    debugPrint(_formKey.currentState.toString());
+                    try {
+                      await Auth().signInWithEmailAndPassword(
+                        email: _username,
+                        password: _password,
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      debugPrint(e.message);
+                    }
                     // Perform the login action (e.g. send the email and password
                     // to a server to verify the user's credentials)
                     final cameras = await availableCameras();
@@ -177,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 icon: const Icon(Icons.alternate_email_outlined),
                 label: const Text(
-                  'Sign Up with Google',
+                  'Sign In with Google',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
