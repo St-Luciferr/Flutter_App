@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:amid/utility/firebase_actions.dart';
+import 'package:amid/pages/monument_detail.dart';
 // import 'package:firebase_core/firebase_core.dart';
 
 class ListViews extends StatefulWidget {
@@ -14,24 +16,6 @@ class _ListViewsState extends State<ListViews> {
   final storageRef = FirebaseStorage.instance.ref();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String? url;
-
-  Future<Map<String, dynamic>>? getData(String name) async {
-    dynamic monument;
-    await firestore.collection("monuments").doc(name).get().then((value) {
-      monument = value.data();
-    });
-    return monument;
-  }
-
-  Future<void> getTestData(String name) async {
-    final data = await firestore.collection('test').doc(name).get();
-    debugPrint(data.data().toString());
-  }
-
-  Future<String> getImage(String name) async {
-    final imagesRef = storageRef.child("images/$name.JPG");
-    return imagesRef.getDownloadURL();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +56,7 @@ class _ListViewsState extends State<ListViews> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //displays monument image
+                      //displays monument image at center
                       Align(
                         alignment: Alignment.center,
                         child: FutureBuilder(
@@ -82,25 +66,36 @@ class _ListViewsState extends State<ListViews> {
                                 ConnectionState.done) {
                               return Container(
                                 decoration: BoxDecoration(
-                                  // borderRadius: BorderRadius.circular(28),
                                   color:
                                       const Color.fromARGB(255, 212, 219, 219),
-                                  borderRadius: BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(11),
                                   border: Border.all(
-                                    width: 2,
+                                    width: 1,
                                     color:
                                         const Color.fromARGB(255, 50, 196, 210),
                                   ),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.4),
+                                      offset: Offset(0, 0),
+                                      blurRadius: 4.0,
+                                    ),
+                                  ],
                                 ),
-                                child: Image(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image(
                                     image: NetworkImage(snapshot.data ?? ''),
                                     height: 300,
-                                    width: 300),
+                                    width: 300,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               );
                             } else {
                               return Container(
                                 decoration: BoxDecoration(
-                                  // borderRadius: BorderRadius.circular(28),
+                                  borderRadius: BorderRadius.circular(12),
                                   color:
                                       const Color.fromARGB(255, 212, 219, 219),
                                   border: Border.all(
@@ -109,8 +104,8 @@ class _ListViewsState extends State<ListViews> {
                                         const Color.fromARGB(255, 50, 196, 210),
                                   ),
                                 ),
-                                height: 120,
-                                width: 120,
+                                height: 300,
+                                width: 300,
                                 child: const Center(
                                     child: CircularProgressIndicator()),
                               );
@@ -118,12 +113,11 @@ class _ListViewsState extends State<ListViews> {
                           },
                         ),
                       ),
-                      // FutureBuilder(
-                      //     future: getData("Dattatreya Temple"),
-                      //     builder: (context, snapshot) {}),
+                      //put gap between image and content
                       const SizedBox(
                         height: 5,
                       ),
+                      //show details about the monument
                       FutureBuilder(
                         future: getData('Dattatreya Temple'),
                         builder: (context, snapshot) {
@@ -153,36 +147,35 @@ class _ListViewsState extends State<ListViews> {
                                           const Color.fromARGB(255, 2, 71, 88),
                                       foregroundColor: const Color.fromARGB(
                                           255, 255, 255, 255),
-                                      fixedSize: const Size(150, 35),
+                                      fixedSize: const Size(145, 35),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(25),
                                       ),
                                     ),
-                                    child: const Text('View More >'),
-                                    onPressed: () async {
-                                      // Validate the form
+                                    child: const Text(
+                                      'View More >>',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      debugPrint(
+                                          "monument: ${monument['detectedClass'] ?? monument['DetectedClass'] ?? ''}");
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailedView(
+                                            title:
+                                                snapshot.data?['Monument_Name'],
+                                            monument:
+                                                monument['detectedClass'] ??
+                                                    monument['DetectedClass'] ??
+                                                    '',
+                                          ),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),
-                                // Center(
-                                //   child: formattedDetails(
-                                //     "Confidence Score: ",
-                                //     monument['confidenceInClass'].toString(),
-                                //   ),
-                                // ),
-
-                                // formattedDetails(
-                                //   "Construction Date: ",
-                                //   snapshot.data?["Construction_Date"],
-                                // ),
-                                // formattedDetails(
-                                //   "Constructed By: ",
-                                //   snapshot.data?["Constructed_by"],
-                                // ),
-                                // formattedDetails(
-                                //   "Detailed Description: ",
-                                //   "${snapshot.data?["Detailed_description"].substring(0, 210)}...",
-                                // ),
                               ],
                             );
                           } else {

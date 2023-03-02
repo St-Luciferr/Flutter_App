@@ -3,7 +3,6 @@ import 'package:amid/utility/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:amid/pages/login.dart';
 import 'package:flutter/material.dart';
-import 'package:bcrypt/bcrypt.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key, required this.title});

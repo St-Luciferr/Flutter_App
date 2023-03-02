@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-Widget formattedDetails(String label, String text) {
+Widget formattedDetails(String label, String text, double size) {
   return RichText(
     textAlign: TextAlign.justify,
     text: TextSpan(
         text: label,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 14,
-          color: Color.fromARGB(255, 80, 80, 80),
+          fontSize: size,
+          color: const Color.fromARGB(255, 80, 80, 80),
         ),
         children: <TextSpan>[
           TextSpan(
             text: text,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.normal,
-              fontSize: 14,
+              fontSize: size,
             ),
           ),
         ]),
