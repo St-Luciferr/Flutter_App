@@ -20,7 +20,7 @@ class InferencePictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     File imgfile = File(imagePath);
     Image img = Image.file(imgfile);
-
+    int delta = 15;
     return Scaffold(
       appBar: AppBar(title: const Text('Inference Results')),
       // The image is stored as a file on the device. Use the `Image.file`
@@ -47,7 +47,7 @@ class InferencePictureScreen extends StatelessWidget {
                       // y: 0,
                       // w: 392,
                       // h: 524,
-
+                      delta: (delta += 35),
                       x: monument['rect']['x'] * width,
                       y: monument['rect']['y'] * height,
                       w: (monument['rect']['x'] + monument['rect']['w']) *
@@ -118,6 +118,7 @@ Route _createRoute(monuments) {
 //paints rectangle over image
 class RectanglePainter extends CustomPainter {
   double x, y, w, h;
+  int delta;
   File image;
   String name;
   RectanglePainter(
@@ -125,24 +126,31 @@ class RectanglePainter extends CustomPainter {
       required this.y,
       required this.w,
       required this.h,
+      required this.delta,
       required this.name,
       required this.image});
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(
+    Canvas canvas,
+    Size size,
+  ) {
     Paint paint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.red
+      // ..color = Color.fromARGB(255, 13, 174 + delta, 174 - delta)
+      ..color = Color.fromARGB(255, 20, 60 + delta, 70 + delta)
       ..strokeWidth = 2;
 
     debugPrint("x: $x\ty: $y\tw: $w\th: $h");
+
+    //testspan to be printed with style
     final textSpan = TextSpan(
       text: name,
-      style: const TextStyle(
-        fontSize: 11,
-        color: Colors.red,
-      ),
+      style: TextStyle(
+          fontSize: 11, color: Color.fromARGB(255, 20, 60 + delta, 70 + delta)),
     );
+
+    //paints text on the window
     final textPainter = TextPainter(
       text: textSpan,
       textDirection: TextDirection.ltr,

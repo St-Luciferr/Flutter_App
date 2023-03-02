@@ -17,14 +17,14 @@ class DetailedView extends StatelessWidget {
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/homepage.jpg'),
+                image: AssetImage('assets/images/inner_background.jpg'),
                 fit: BoxFit.fill),
           ),
           child: SingleChildScrollView(
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Color.fromARGB(99, 227, 250, 247),
+                color: const Color.fromARGB(99, 227, 250, 247),
                 boxShadow: const [
                   BoxShadow(
                     color: Color.fromRGBO(0, 0, 0, 0.2),

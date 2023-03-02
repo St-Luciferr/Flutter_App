@@ -215,6 +215,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(28),
                     color: const Color.fromARGB(255, 13, 174, 174),
+                    // color: Color.fromARGB(255, 10, 171, 171),
                     border: Border.all(
                       width: 4,
                       color: const Color.fromARGB(255, 50, 196, 210),
@@ -355,8 +356,8 @@ Future<Response<dynamic>?> _yoloModel(String imagePath) async {
 //function to laod tflite model
 Future<void> _inittfModel() async {
   String? res = await Tflite.loadModel(
-      model: "assets/models/monument512.tflite",
-      labels: "assets/labels/test_label.txt",
+      model: "assets/models/final_model.tflite",
+      labels: "assets/labels/Final_Labels.txt",
       numThreads: 1, // defaults to 1
       // defaults to true, set to false to load resources outside assets
       isAsset: true,
