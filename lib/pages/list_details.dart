@@ -119,7 +119,11 @@ class _ListViewsState extends State<ListViews> {
                       ),
                       //show details about the monument
                       FutureBuilder(
-                        future: getData('Dattatreya Temple'),
+                        future: getData(
+                          monument['detectedClass'] ??
+                              monument['DetectedClass'] ??
+                              'null',
+                        ),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {

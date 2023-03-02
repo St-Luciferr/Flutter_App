@@ -80,12 +80,13 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         drawer: Drawer(
+          backgroundColor: const Color.fromARGB(255, 227, 250, 247),
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
                 decoration: const BoxDecoration(
-                  color: Colors.blue,
+                  color: Color.fromARGB(255, 13, 174, 174),
                 ),
                 child: Column(
                   children: [
@@ -108,13 +109,18 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Logout'),
+                trailing: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                tileColor: const Color.fromARGB(255, 13, 174, 174),
+                title: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
                 onTap: () {
                   FirebaseAuth.instance.signOut();
                   Navigator.of(context).pushReplacement(
@@ -209,13 +215,16 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                const SizedBox(
+                  width: 5,
+                ),
                 Container(
                   margin: const EdgeInsets.fromLTRB(5, 2, 5, 2),
                   // padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(28),
                     color: const Color.fromARGB(255, 13, 174, 174),
-                    // color: Color.fromARGB(255, 10, 171, 171),
+                    // color: Color.fromARGB(255, 1, 64, 73),
                     border: Border.all(
                       width: 4,
                       color: const Color.fromARGB(255, 50, 196, 210),

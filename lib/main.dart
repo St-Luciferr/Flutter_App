@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+
 import 'pages/login.dart';
 
 Future<void> main() async {
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: createMaterialColor(
               const Color.fromARGB(255, 13, 174, 174),
-              // const Color.fromARGB(255, 133, 202, ),
             ),
           ),
           home: FutureBuilder(
