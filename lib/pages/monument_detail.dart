@@ -15,6 +15,8 @@ class DetailedView extends StatelessWidget {
           title: Text(title),
         ),
         body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/images/inner_background.jpg'),
@@ -96,22 +98,13 @@ class DetailedView extends StatelessWidget {
                     height: 5,
                   ),
                   FutureBuilder(
-                    future: getData('Dattatreya Temple'),
+                    future: getData(monument),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         debugPrint(snapshot.data.toString());
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Center(
-                            //   child: Text(
-                            //     snapshot.data?['Monument_Name'],
-                            //     style: const TextStyle(
-                            //         fontSize: 20,
-                            //         fontWeight: FontWeight.bold,
-                            //         color: Color.fromARGB(255, 80, 80, 80)),
-                            //   ),
-                            // ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -122,7 +115,7 @@ class DetailedView extends StatelessWidget {
                             ),
                             const Divider(
                               thickness: 1,
-                              height: 3,
+                              height: 5,
                             ),
                             formattedDetails(
                               "Constructed By: ",
@@ -131,7 +124,7 @@ class DetailedView extends StatelessWidget {
                             ),
                             const Divider(
                               thickness: 1,
-                              height: 3,
+                              height: 5,
                             ),
                             formattedDetails(
                               "Architecture Style: ",
@@ -140,7 +133,7 @@ class DetailedView extends StatelessWidget {
                             ),
                             const Divider(
                               thickness: 1,
-                              height: 3,
+                              height: 5,
                             ),
                             formattedDetails(
                               "Main Deity: ",
@@ -149,7 +142,7 @@ class DetailedView extends StatelessWidget {
                             ),
                             const Divider(
                               thickness: 1,
-                              height: 3,
+                              height: 5,
                             ),
                             formattedDetails(
                               "Number of Storeys: ",
@@ -158,11 +151,11 @@ class DetailedView extends StatelessWidget {
                             ),
                             const Divider(
                               thickness: 1,
-                              height: 3,
+                              height: 5,
                             ),
                             formattedDetails(
                               "Detailed Description: ",
-                              "${snapshot.data?["Detailed_description"]}",
+                              "${snapshot.data?["Detailed_Description"]}",
                               size,
                             ),
                           ],
