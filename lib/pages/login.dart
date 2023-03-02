@@ -2,7 +2,6 @@ import 'package:amid/provider/google_sign_in.dart';
 import 'package:amid/utility/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:bcrypt/bcrypt.dart';
 import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
 import 'signup.dart';
@@ -22,8 +21,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool isAuthenticated = false;
   // Create variables to store the user's email and password
-  String _username = '';
-  String _password = '';
+  String? _username;
+  String? _password;
 
   @override
   Widget build(BuildContext context) {
@@ -58,18 +57,32 @@ class _LoginPageState extends State<LoginPage> {
                 height: 30,
               ),
               TextFormField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   // filled: true,
                   // fillColor: Colors.grey,
-                  contentPadding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+                  prefixIcon: const Icon(
+                    Icons.account_circle,
+                    color: Color.fromARGB(255, 13, 174, 174),
+                  ),
+                  contentPadding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
                   labelText: 'Username',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: Color.fromARGB(255, 6, 95, 95),
                   ),
                   hintText: 'Enter Your Username',
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     fontSize: 13,
                     color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  alignLabelWithHint: true,
+                  // floatingLabelAlignment: FloatingLabelAlignment.start,
+                  filled: true,
+                  fillColor: const Color.fromARGB(74, 153, 167, 168),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide:
+                        const BorderSide(width: 0, style: BorderStyle.none),
                   ),
                 ),
                 validator: (value) {
@@ -91,16 +104,28 @@ class _LoginPageState extends State<LoginPage> {
                 height: 10,
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                  prefixIcon: const Icon(
+                    Icons.key,
+                    color: Color.fromARGB(255, 13, 174, 174),
+                  ),
                   labelText: 'Password',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: Color.fromARGB(255, 6, 95, 95),
                   ),
-                  hintText: '********',
-                  hintStyle: TextStyle(
+                  hintText: 'Enter Your Password',
+                  hintStyle: const TextStyle(
                     fontSize: 15,
                     color: Color.fromARGB(255, 11, 148, 148),
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  filled: true,
+                  fillColor: const Color.fromARGB(74, 153, 167, 168),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide:
+                        const BorderSide(width: 0, style: BorderStyle.none),
                   ),
                 ),
                 obscureText: true,
@@ -137,8 +162,8 @@ class _LoginPageState extends State<LoginPage> {
                     _formKey.currentState!.save();
                     try {
                       await Auth().signInWithEmailAndPassword(
-                        email: _username,
-                        password: _password,
+                        email: _username ?? '',
+                        password: _password ?? '',
                       );
                     } on FirebaseAuthException catch (e) {
                       debugPrint(e.message);
