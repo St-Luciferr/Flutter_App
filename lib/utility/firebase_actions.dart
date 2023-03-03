@@ -14,6 +14,6 @@ Future<Map<String, dynamic>>? getData(String name) async {
 }
 
 Future<String> getImage(String name) async {
-  final imagesRef = FirebaseStorage.instance.ref().child("images/$name.JPG");
+  final imagesRef = FirebaseStorage.instance.ref().child("images/$name.jpg");
   return imagesRef.getDownloadURL();
 }

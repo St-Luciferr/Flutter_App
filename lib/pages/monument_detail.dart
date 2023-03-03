@@ -45,7 +45,7 @@ class DetailedView extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: FutureBuilder(
-                      future: getImage('test_monument'),
+                      future: getImage(monument),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return Container(
@@ -69,8 +69,8 @@ class DetailedView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10.0),
                               child: Image(
                                 image: NetworkImage(snapshot.data ?? ''),
-                                height: 300,
-                                width: 300,
+                                height: 240,
+                                width: 320,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -85,8 +85,8 @@ class DetailedView extends StatelessWidget {
                                 color: const Color.fromARGB(255, 50, 196, 210),
                               ),
                             ),
-                            height: 300,
-                            width: 300,
+                            height: 240,
+                            width: 320,
                             child: const Center(
                                 child: CircularProgressIndicator()),
                           );

@@ -60,7 +60,9 @@ class _ListViewsState extends State<ListViews> {
                       Align(
                         alignment: Alignment.center,
                         child: FutureBuilder(
-                          future: getImage('test_monument'),
+                          future: getImage(monument['detectedClass'] ??
+                              monument['DetectedClass'] ??
+                              'null'),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
@@ -86,8 +88,8 @@ class _ListViewsState extends State<ListViews> {
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: Image(
                                     image: NetworkImage(snapshot.data ?? ''),
-                                    height: 300,
-                                    width: 300,
+                                    height: 240,
+                                    width: 320,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -104,8 +106,8 @@ class _ListViewsState extends State<ListViews> {
                                         const Color.fromARGB(255, 50, 196, 210),
                                   ),
                                 ),
-                                height: 300,
-                                width: 300,
+                                height: 240,
+                                width: 320,
                                 child: const Center(
                                     child: CircularProgressIndicator()),
                               );
